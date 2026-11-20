@@ -10,7 +10,7 @@ resource "null_resource" "gitops_infra_deployment" {
   triggers = {
     deployed_by = "Amrish Yadav (amrish071)"
     env         = var.environment
-    version     = "v1.0.0"
+    version     = "v1.1.0"
   }
 
   provisioner "local-exec" {
