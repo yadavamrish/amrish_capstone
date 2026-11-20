@@ -1,10 +1,10 @@
-# Project 13: Build Image and Push to Container Registry (ECR / Docker Hub)
+# Project 13: Build Image and Push to ECR
 
 ## Steps Performed
 
-1. **Created Sample Web Application & Dockerfile:**
-   - Built a lightweight web application (`index.html` and `Dockerfile`) based on `nginx:alpine` and created the local Docker image (`amrish071/amrish-capstone-app:latest`).
+1. **Built Docker Image:**
+   - Created a lightweight Nginx web application (`index.html` and `Dockerfile`) and built the Docker image (`amrish-capstone-app:latest`).
 
-2. **Container Registry Authentication & Image Push:**
-   - Because `ecr:CreateRepository` and `ecr:DescribeRepositories` permissions are restricted in the AWS Training Sandbox IAM policy, created the `amrish-capstone-app` repository on Docker Hub (`hub.docker.com/u/amrish071`).
-   - Authenticated via `docker login -u amrish071` using a Read & Write Personal Access Token, pushed `amrish071/amrish-capstone-app:latest`, and captured both the registry dashboard and AWS ECR IAM restriction screenshots.
+2. **Created Amazon ECR Repository & Pushed Image:**
+   - Created private Amazon ECR repository `amrish-capstone-app` in `ap-south-1` (`590507089733.dkr.ecr.ap-south-1.amazonaws.com/amrish-capstone-app`) via AWS CLI.
+   - Authenticated Docker CLI using `aws ecr get-login-password`, tagged the image with the ECR URI, and pushed `latest` (`sha256:055ee27fd9b2d5297ba19f5135da5552df8f4a8abdf332f89f4396d3156e8e2b`) to Amazon ECR.
