@@ -1,0 +1,34 @@
+---
+- name: Automate Web Server Installation and Configuration
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Update apt cache and install Nginx web server
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Configure Nginx to listen on port 8088
+      replace:
+        path: /etc/nginx/sites-available/default
+        regexp: '80 default_server'
+        replace: '8088 default_server'
+
+    - name: Deploy custom HTML index page
+      copy:
+        dest: /var/www/html/index.html
+        content: |
+          <!DOCTYPE html>
+          <html>
+          <head><title>Project 15 - Ansible Automation</title></head>
+          <body>
+            <h1>Hello from Amrish Yadav (amrish071) - Project 15 Ansible Automated Web Server</h1>
+          </body>
+          </html>
+
+    - name: Ensure Nginx service is started and enabled
+      service:
+        name: nginx
+        state: restarted
+        enabled: yes
