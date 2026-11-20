@@ -9,3 +9,9 @@ variable "s3_read_policy_arn" {
   type        = string
   default     = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
 }
+
+variable "environment" {
+  description = "Deployment environment tag"
+  type        = string
+  default     = "production"
+}
