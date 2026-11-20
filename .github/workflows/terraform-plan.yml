@@ -1,0 +1,41 @@
+name: Project 12 - Terraform Plan CI
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'capstone/project12-terraform-ci-plan/**'
+      - '.github/workflows/terraform-plan.yml'
+
+jobs:
+  terraform-plan:
+    name: Validate & Generate Terraform Plan
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: capstone/project12-terraform-ci-plan
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.7.5
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+
+      - name: Upload Plan Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-plan-artifact
+          path: capstone/project12-terraform-ci-plan/tfplan
+          retention-days: 7
