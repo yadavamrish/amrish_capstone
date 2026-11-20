@@ -1,0 +1,51 @@
+name: Project 18 - GitOps Infra Deployment
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+    paths:
+      - 'capstone/project18-gitops-infra/**'
+      - '.github/workflows/project18-gitops-deploy.yml'
+  workflow_dispatch:
+
+jobs:
+  terraform-plan:
+    name: Terraform Plan (Pre-Approval Check)
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: capstone/project18-gitops-infra
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init & Plan
+        run: |
+          terraform init
+          terraform validate
+          terraform plan -out=tfplan
+
+  terraform-apply:
+    name: Terraform Apply (Production Approval Required)
+    needs: terraform-plan
+    runs-on: ubuntu-latest
+    environment: production-approval
+    defaults:
+      run:
+        working-directory: capstone/project18-gitops-infra
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init & Apply
+        run: |
+          terraform init
+          terraform apply -auto-approve
