@@ -1,0 +1,20 @@
+{
+  "Rules": [
+    {
+      "ID": "amrish-p22-log-archive-expiration-rule",
+      "Filter": {
+        "Prefix": "archive-logs/"
+      },
+      "Status": "Enabled",
+      "Transitions": [
+        {
+          "Days": 30,
+          "StorageClass": "GLACIER"
+        }
+      ],
+      "Expiration": {
+        "Days": 90
+      }
+    }
+  ]
+}
