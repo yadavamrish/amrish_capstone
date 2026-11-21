@@ -1,28 +1,28 @@
 # Project 02: Serverless S3 Static Website Hosting via Terraform
 
 ## 1. Project Overview & Goal
-Bina kisi EC2 server ko manage kiye **Amazon S3** par ek serverless, cost-effective static website host karna aur poora S3 bucket + public bucket policy + website configuration **Terraform** se automate karna.
+The goal of this project is to host a serverless, highly available static website on **Amazon S3** without managing any backend compute instances, automating bucket creation, public read policies, website configuration, and object upload via **Terraform**.
 
 ## 2. Files in This Folder
-- `provider.tf` — AWS Mumbai (`ap-south-1`) provider setup.
-- `main.tf` — S3 bucket, public access block settings, public read bucket policy (`s3:GetObject`), static website hosting configuration, aur `index.html` object upload define karta hai.
-- `outputs.tf` — Created S3 bucket ka live HTTP website endpoint URL output karta hai.
-- `index.html` — S3 par host hone wala static webpage.
+- `provider.tf` — Configures the AWS provider for `ap-south-1`.
+- `main.tf` — Defines the S3 bucket, disables public access blocks, attaches a public `s3:GetObject` bucket policy, enables static website hosting, and uploads `index.html`.
+- `outputs.tf` — Outputs the live S3 static website endpoint URL.
+- `index.html` — Static HTML webpage hosted inside the S3 bucket.
 
-## 3. Step-by-Step Implementation (Kya & Kaise Kiya)
-1. **S3 Bucket & Access Policy in HCL:** `main.tf` mein globally unique S3 bucket banaya, public access block disable kiya, aur public read policy attach ki taaki web visitors `index.html` read kar sakein.
-2. **Website Hosting Enablement:** `aws_s3_bucket_website_configuration` resource se `index.html` ko default index document set kiya.
-3. **Deployment & Verification:** `terraform apply` se bucket deploy karke S3 website URL par live site check ki.
+## 3. Step-by-Step Implementation
+1. **Bucket & Public Access Policy:** Defined a globally unique S3 bucket in `main.tf`, disabled default public access restrictions, and attached a JSON bucket policy permitting anonymous read access to website files.
+2. **Static Website Configuration:** Enabled S3 static website hosting with `index.html` configured as the default index document.
+3. **Deployment & Endpoint Validation:** Applied the Terraform configuration and verified live HTTP delivery over the S3 website endpoint.
 
-## 4. Commands Executed & Unka Kaam
+## 4. Commands Executed & Purpose
 1. `cd capstone/project02-s3-static-website && terraform init`
-   - **Kaam:** S3 project directory mein Terraform initialize karta hai.
+   - **Purpose:** Initializes Terraform and downloads the AWS provider plugin.
 2. `terraform validate && terraform plan`
-   - **Kaam:** S3 bucket aur policy configuration validate karke execution plan dikhata hai.
+   - **Purpose:** Validates S3 resource definitions and previews planned infrastructure changes.
 3. `terraform apply -auto-approve`
-   - **Kaam:** AWS par S3 bucket create karta hai, website hosting on karta hai, aur `index.html` upload karta hai.
+   - **Purpose:** Creates the S3 bucket, configures static website hosting, applies the bucket policy, and uploads `index.html`.
 4. `curl -i http://<S3_WEBSITE_ENDPOINT>`
-   - **Kaam:** S3 static website endpoint par HTTP request bhej kar `200 OK` aur live HTML content verify karta hai.
+   - **Purpose:** Verifies that the S3 website endpoint serves `index.html` with an `HTTP 200 OK` status.
 
-## 5. Expected Output / Verification
-- `terraform output` se mila S3 website URL browser aur `curl` dono mein bina kisi error ke `200 OK` ke saath `index.html` serve karta hai.
+## 5. Expected Output & Verification
+- Navigating to the S3 website endpoint URL printed by `terraform output` loads `index.html` cleanly with `HTTP/1.1 200 OK`.

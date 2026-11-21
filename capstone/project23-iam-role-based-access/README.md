@@ -1,26 +1,26 @@
 # Project 23: Credential-Free S3 Access via EC2 IAM Roles
 
 ## 1. Project Overview & Goal
-EC2 instance par koi bhi hardcoded AWS Access Key ya Secret Key store kiye bina, **IAM Role** (`amrish-p23-ec2-s3-role` with `AmazonS3ReadOnlyAccess`) aur **Instance Profile** attach karke Amazon S3 ko securely access karna.
+The goal of this project is to eliminate hardcoded AWS Access Keys and Secret Keys on EC2 instances by creating an **IAM Role** (`amrish-p23-ec2-s3-role` with `AmazonS3ReadOnlyAccess` and `ec2-trust-policy.json`) and attaching it via an **IAM Instance Profile** for secure, credential-free Amazon S3 access.
 
 ## 2. Files in This Folder
-- `ec2-trust-policy.json` — IAM trust policy document jo `ec2.amazonaws.com` service ko role assume karne ki permission deta hai.
-- `cli-test-output.txt` — IAM Instance Profile association aur `aws s3 ls` verification output record.
+- `ec2-trust-policy.json` — IAM trust relationship policy allowing `ec2.amazonaws.com` to assume the role via AWS STS.
+- `cli-test-output.txt` — Recorded verification output showing active Instance Profile association and successful S3 bucket listing.
 
-## 3. Step-by-Step Implementation (Kya & Kaise Kiya)
-1. **IAM Role & Policy Setup:** `ec2-trust-policy.json` ke saath IAM Role banaya aur `AmazonS3ReadOnlyAccess` managed policy attach ki.
-2. **Instance Profile Association:** Instance Profile banakar role ko add kiya aur running EC2 instance se associate kiya.
-3. **CLI Access Audit:** `describe-iam-instance-profile-associations` aur `aws s3 ls` run karke result `cli-test-output.txt` mein verify kiya.
+## 3. Step-by-Step Implementation
+1. **IAM Role & Policy Creation:** Created `amrish-p23-ec2-s3-role` using `ec2-trust-policy.json` and attached the `AmazonS3ReadOnlyAccess` managed policy.
+2. **Instance Profile Attachment:** Created an Instance Profile, added the role, and associated it with the running EC2 instance.
+3. **Credential-Free Access Audit:** Verified the `associated` state via `describe-iam-instance-profile-associations` and saved S3 read verification output in `cli-test-output.txt`.
 
-## 4. Commands Executed & Unka Kaam
+## 4. Commands Executed & Purpose
 1. `aws iam create-role --role-name amrish-p23-ec2-s3-role --assume-role-policy-document file://capstone/project23-iam-role-based-access/ec2-trust-policy.json`
-   - **Kaam:** EC2 trust policy ke saath naya IAM Role create karta hai.
+   - **Purpose:** Creates an IAM Role trusted by the EC2 service.
 2. `aws iam attach-role-policy --role-name amrish-p23-ec2-s3-role --policy-arn arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess`
-   - **Kaam:** IAM Role ko S3 buckets read karne ki permission attach karta hai.
+   - **Purpose:** Grants read-only Amazon S3 permissions to the IAM Role.
 3. `aws ec2 associate-iam-instance-profile --instance-id $EC2_ID --iam-instance-profile Name=amrish-p23-ec2-s3-profile --region ap-south-1`
-   - **Kaam:** Running EC2 instance ke saath IAM Instance Profile attach karta hai.
+   - **Purpose:** Binds the IAM Instance Profile to the running EC2 instance.
 4. `aws ec2 describe-iam-instance-profile-associations --filters "Name=instance-id,Values=$EC2_ID" --region ap-south-1`
-   - **Kaam:** Verify karta hai ki IAM Role EC2 instance par `associated` state mein active hai.
+   - **Purpose:** Confirms the IAM Role is actively `associated` with the EC2 instance.
 
-## 5. Expected Output / Verification
-- EC2 instance bina `~/.aws/credentials` ke STS temporary role credentials use karke S3 buckets list kar pata hai (`cli-test-output.txt`).
+## 5. Expected Output & Verification
+- The EC2 instance lists S3 buckets seamlessly using temporary STS role credentials without any static credentials stored on disk (`cli-test-output.txt`).

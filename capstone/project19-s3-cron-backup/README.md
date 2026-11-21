@@ -1,25 +1,25 @@
 # Project 19: Automated Log & File Backups to S3 via Linux Cron
 
 ## 1. Project Overview & Goal
-Disaster recovery aur data durability ke liye executable bash script (`backup_logs_to_s3.sh`) aur Linux **cron** scheduler ke zariye application logs ko automatically timestamped `.tar.gz` archive mein compress karke **Amazon S3** par backup karna.
+The goal of this project is to automate disaster recovery backups by compressing application logs and critical files into timestamped `.tar.gz` archives via a bash script (`backup_logs_to_s3.sh`) and uploading them to **Amazon S3** on a recurring schedule using Linux **cron**.
 
 ## 2. Files in This Folder
-- `backup_logs_to_s3.sh` — Logs ko `.tar.gz` format mein compress karke `aws s3 cp` se S3 bucket par upload karne wali automation script.
+- `backup_logs_to_s3.sh` — Executable shell script that creates a timestamped `.tar.gz` archive, uploads it to S3 via `aws s3 cp`, and cleans up temporary local files.
 
-## 3. Step-by-Step Implementation (Kya & Kaise Kiya)
-1. **Backup Script Creation (`backup_logs_to_s3.sh`):** Timestamped archive creation, S3 upload, aur local temp file cleanup logic likha.
-2. **Cron Job Scheduling:** `crontab` mein scheduled entry add ki taaki backup script bina manual intervention ke automatically run ho.
-3. **S3 Bucket Verification:** Script execute karke S3 bucket ke andar uploaded `.tar.gz` archive verify kiya.
+## 3. Step-by-Step Implementation
+1. **Backup Script Authoring (`backup_logs_to_s3.sh`):** Built a shell script with timestamp formatting, `tar -czf` compression, S3 upload, and status logging.
+2. **Cron Scheduling:** Registered a scheduled cron entry in `crontab` to execute the backup script automatically without manual intervention.
+3. **S3 Bucket Verification:** Executed the script and verified uploaded `.tar.gz` archives inside the target S3 bucket.
 
-## 4. Commands Executed & Unka Kaam
+## 4. Commands Executed & Purpose
 1. `chmod +x capstone/project19-s3-cron-backup/backup_logs_to_s3.sh`
-   - **Kaam:** Backup bash script ko executable permission deta hai.
+   - **Purpose:** Grants execution permissions to the backup shell script.
 2. `./capstone/project19-s3-cron-backup/backup_logs_to_s3.sh`
-   - **Kaam:** Target logs ko compress karke S3 bucket mein upload karta hai.
+   - **Purpose:** Compresses logs into a `.tar.gz` archive and uploads it to Amazon S3.
 3. `crontab -l`
-   - **Kaam:** Active scheduled cron job entry terminal par verify karta hai.
+   - **Purpose:** Lists active user cron jobs to verify the scheduled backup entry.
 4. `aws s3 ls s3://<BACKUP_BUCKET>/ --recursive --human-readable`
-   - **Kaam:** S3 bucket mein uploaded `.tar.gz` backup archives aur unka size check karta hai.
+   - **Purpose:** Confirms that compressed `.tar.gz` backup objects exist in the S3 bucket with expected file sizes.
 
-## 5. Expected Output / Verification
-- S3 bucket mein timestamped `.tar.gz` backup files upload hoti hain aur `crontab -l` mein scheduled job active dikhti hai.
+## 5. Expected Output & Verification
+- Timestamped `.tar.gz` archives appear in S3 and `crontab -l` displays the scheduled backup job.

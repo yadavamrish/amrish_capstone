@@ -1,21 +1,21 @@
 # Project 21: Centralized AWS CloudWatch Monitoring Dashboard
 
 ## 1. Project Overview & Goal
-Infrastructure aur application telemetry ko ek single observability screen par monitor karne ke liye JSON widget configuration (`dashboard-body.json`) ke zariye **Amazon CloudWatch Dashboard** (`amrish-capstone-performance-dashboard`) create karna.
+The goal of this project is to consolidate infrastructure and application telemetry into a single observability screen by deploying a custom **Amazon CloudWatch Dashboard** (`amrish-capstone-performance-dashboard`) via JSON widget definitions (`dashboard-body.json`).
 
 ## 2. Files in This Folder
-- `dashboard-body.json` — 4-widget JSON layout definition (EC2 `CPUUtilization` & `NetworkIn`/`NetworkOut`, ALB `RequestCount` & `TargetResponseTime`, CloudWatch Logs `IncomingBytes`/`IncomingLogEvents`, aur Markdown overview card).
+- `dashboard-body.json` — 4-widget JSON layout tracking EC2 (`CPUUtilization`, `NetworkIn`, `NetworkOut`), ALB (`RequestCount`, `TargetResponseTime`), CloudWatch Logs (`IncomingBytes`, `IncomingLogEvents`), and a Markdown summary header.
 
-## 3. Step-by-Step Implementation (Kya & Kaise Kiya)
-1. **Widget Layout Authoring (`dashboard-body.json`):** Compute, Load Balancer, aur Log ingestion metrics ko time-series graphs mein organize kiya.
-2. **CLI Deployment:** `aws cloudwatch put-dashboard` run karke `ap-south-1` region mein dashboard provision kiya.
-3. **Dashboard Verification:** CloudWatch Console aur `list-dashboards` CLI se active dashboard verify kiya.
+## 3. Step-by-Step Implementation
+1. **Dashboard JSON Authoring (`dashboard-body.json`):** Structured time-series metric widgets across Compute, Load Balancing, and Log Ingestion namespaces.
+2. **CLI Provisioning:** Deployed the dashboard to `ap-south-1` using `aws cloudwatch put-dashboard`.
+3. **Visualization Verification:** Confirmed dashboard registration via CLI and inspected live graphs in the CloudWatch Console.
 
-## 4. Commands Executed & Unka Kaam
+## 4. Commands Executed & Purpose
 1. `aws cloudwatch put-dashboard --dashboard-name amrish-capstone-performance-dashboard --dashboard-body file://capstone/project21-cloudwatch-monitoring-dashboard/dashboard-body.json --region ap-south-1`
-   - **Kaam:** `dashboard-body.json` se AWS CloudWatch mein custom performance monitoring dashboard create/update karta hai.
+   - **Purpose:** Creates or updates the CloudWatch Dashboard using the widget definitions in `dashboard-body.json`.
 2. `aws cloudwatch list-dashboards --region ap-south-1 --output table`
-   - **Kaam:** Deployed dashboard ka naam aur ARN CLI se verify karta hai.
+   - **Purpose:** Lists active CloudWatch Dashboards in `ap-south-1` to confirm deployment.
 
-## 5. Expected Output / Verification
-- AWS CloudWatch Console -> Dashboards mein `amrish-capstone-performance-dashboard` ke andar sabhi 4 telemetry widgets live render hote hain.
+## 5. Expected Output & Verification
+- `amrish-capstone-performance-dashboard` appears in AWS CloudWatch Console -> Dashboards with all 4 widgets rendering telemetry data.

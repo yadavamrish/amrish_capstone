@@ -1,24 +1,24 @@
 # Project 12: Automated Terraform Plan CI with GitHub Actions
 
 ## 1. Project Overview & Goal
-GitHub Actions CI workflow (`.github/workflows/terraform-plan.yml`) ke zariye har code push par `capstone/project12-terraform-ci-plan/main.tf` ko automatically initialize, validate, aur `terraform plan` execute karke plan artifact generate karna.
+The goal of this project is to automate Terraform validation and execution plan generation on every push to `main` using a **GitHub Actions CI Workflow** (`.github/workflows/terraform-plan.yml`) targeting `capstone/project12-terraform-ci-plan/main.tf`.
 
 ## 2. Files in This Folder & Workflow
-- `main.tf` — Declarative Terraform infrastructure definition jo CI pipeline ke through validate hoti hai.
-- `.github/workflows/terraform-plan.yml` — Path-triggered GitHub Actions workflow jo `terraform init`, `terraform validate`, `terraform plan -out=tfplan`, aur artifact upload automate karta hai.
+- `main.tf` — Declarative Terraform infrastructure definition validated by the CI pipeline.
+- `.github/workflows/terraform-plan.yml` — Path-triggered GitHub Actions workflow running `terraform init`, `terraform validate`, `terraform plan -out=tfplan`, and artifact upload.
 
-## 3. Step-by-Step Implementation (Kya & Kaise Kiya)
-1. **Terraform Manifest (`main.tf`):** `capstone/project12-terraform-ci-plan/main.tf` mein AWS infrastructure configuration likhi.
-2. **CI Pipeline Setup:** `hashicorp/setup-terraform@v3` action ke saath automated validation aur plan artifact upload (`actions/upload-artifact@v4`) configure kiya.
-3. **Pipeline Verification:** Commit push karke GitHub Actions tab mein green pass status verify kiya.
+## 3. Step-by-Step Implementation
+1. **Terraform Configuration (`main.tf`):** Authored clean HCL infrastructure resources inside `capstone/project12-terraform-ci-plan/main.tf`.
+2. **GitHub Actions CI Pipeline:** Configured `hashicorp/setup-terraform@v3` to initialize providers, validate syntax, generate `tfplan`, and upload the plan artifact via `actions/upload-artifact@v4`.
+3. **CI Execution Verification:** Pushed changes to `main` and verified green checkmarks in the GitHub Actions workflow run.
 
-## 4. Commands Executed & Unka Kaam
+## 4. Commands Executed & Purpose
 1. `cd capstone/project12-terraform-ci-plan && terraform init -backend=false`
-   - **Kaam:** CI runner par remote state backend ke bina Terraform providers initialize karta hai.
+   - **Purpose:** Initializes Terraform providers on the CI runner without requiring remote backend credentials.
 2. `terraform validate`
-   - **Kaam:** `main.tf` ke HCL syntax aur resource configuration ko validate karta hai.
+   - **Purpose:** Validates HCL syntax and resource configurations inside `main.tf`.
 3. `terraform plan -refresh=false -out=tfplan`
-   - **Kaam:** Infrastructure changes ka binary execution plan (`tfplan`) generate karta hai.
+   - **Purpose:** Generates a binary Terraform execution plan artifact (`tfplan`).
 
-## 5. Expected Output / Verification
-- GitHub Actions mein **Project 12 - Terraform Plan CI** workflow green checkmark (`✓`) ke saath pass hota hai aur `terraform-plan-artifact` upload hota hai.
+## 5. Expected Output & Verification
+- The **Project 12 - Terraform Plan CI** GitHub Actions workflow completes with a green checkmark (`✓`) and uploads `terraform-plan-artifact`.

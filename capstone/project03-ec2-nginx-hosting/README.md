@@ -1,27 +1,27 @@
 # Project 03: Automated Nginx Web Server Hosting on EC2 via Terraform
 
 ## 1. Project Overview & Goal
-Terraform ke zariye AWS EC2 Ubuntu virtual machine aur Security Group provision karke us par high-performance **Nginx Web Server** deploy karna aur default web traffic serve karna.
+The goal of this project is to provision an Ubuntu EC2 instance and Security Group on AWS using **Terraform** and automatically install and start the **Nginx Web Server** to serve HTTP traffic on Port 80.
 
 ## 2. Files in This Folder
-- `provider.tf` — AWS region (`ap-south-1`) provider block.
-- `main.tf` — Security Group (Ports 22 & 80) aur EC2 instance (Nginx installation user-data ke saath) define karta hai.
-- `outputs.tf` — Provisioned EC2 instance ka Public IPv4 address print karta hai.
+- `provider.tf` — Configures the AWS provider in `ap-south-1`.
+- `main.tf` — Defines the EC2 instance, Security Group (`Port 22` & `Port 80`), and user-data script to install and enable Nginx.
+- `outputs.tf` — Exports the Public IP address of the Nginx web server.
 
-## 3. Step-by-Step Implementation (Kya & Kaise Kiya)
-1. **Infrastructure Definition (`main.tf`):** Ubuntu EC2 instance ke saath HTTP (Port 80) aur SSH (Port 22) firewall rules configure kiye.
-2. **Automated Nginx Setup:** Instance boot script mein `apt update && apt install -y nginx` aur service enablement add ki.
-3. **Apply & Live Check:** `terraform apply` run karke Public IP par Nginx landing page verify kiya.
+## 3. Step-by-Step Implementation
+1. **Infrastructure & Firewall Definition:** Configured an Ubuntu EC2 instance paired with a Security Group permitting inbound SSH (`22`) and HTTP (`80`) traffic.
+2. **Automated Nginx Bootstrap:** Included user-data commands to update system packages, install `nginx`, and enable the systemd service on startup.
+3. **Provisioning & HTTP Verification:** Applied the Terraform stack and confirmed Nginx availability over HTTP.
 
-## 4. Commands Executed & Unka Kaam
+## 4. Commands Executed & Purpose
 1. `cd capstone/project03-ec2-nginx-hosting && terraform init`
-   - **Kaam:** Terraform working directory aur AWS provider plugins setup karta hai.
+   - **Purpose:** Initializes the Terraform workspace and provider dependencies.
 2. `terraform validate && terraform plan`
-   - **Kaam:** Configuration syntax check karke resources creation plan dikhata hai.
+   - **Purpose:** Checks HCL syntax and previews the EC2 and Security Group creation plan.
 3. `terraform apply -auto-approve`
-   - **Kaam:** AWS par EC2 instance launch karta hai aur Nginx web server start karta hai.
+   - **Purpose:** Launches the EC2 instance on AWS and installs the Nginx web server.
 4. `curl -i http://<EC2_PUBLIC_IP>`
-   - **Kaam:** Nginx server ke Public IP par HTTP `200 OK` response verify karta hai.
+   - **Purpose:** Confirms `Server: nginx` headers and an `HTTP 200 OK` response on the instance's Public IP.
 
-## 5. Expected Output / Verification
-- Public IP par `curl` karne par `Server: nginx` header ke saath `HTTP/1.1 200 OK` response milta hai.
+## 5. Expected Output & Verification
+- `curl -i http://<EC2_PUBLIC_IP>` returns `HTTP/1.1 200 OK` with Nginx serving the landing page.

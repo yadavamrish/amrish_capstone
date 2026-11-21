@@ -1,26 +1,26 @@
 # Project 05: AWS IAM Users, Groups & Least-Privilege Policies
 
 ## 1. Project Overview & Goal
-AWS account security ko strong banane ke liye root account use karne ke bajay **Least-Privilege Principle** ke mutabik IAM Users, IAM Groups, aur specific Managed/Inline Policies configure karna.
+The goal of this project is to enforce AWS security best practices by eliminating root account usage and configuring **IAM Users**, **IAM Groups**, and **Least-Privilege IAM Policies** for granular access control.
 
-## 2. What Was Configured
-- Dedicated developer/operations IAM user (`amrish-dev-user`) aur IAM group (`devops-engineers`).
-- Granular read/write permissions via AWS IAM Policies.
+## 2. Key Concepts Implemented
+- Non-root IAM user creation (`amrish-dev-user`) and group-based permission management (`devops-engineers`).
+- Attaching scoped AWS Managed Policies following the principle of least privilege.
 
-## 3. Step-by-Step Implementation (Kya & Kaise Kiya)
-1. **User & Group Creation:** AWS CLI ke through naya IAM user aur team group banaya aur user ko group mein add kiya.
-2. **Policy Attachment:** Group par sirf zaroori permissions (e.g., `AmazonEC2ReadOnlyAccess` / `AmazonS3ReadOnlyAccess`) attach ki.
-3. **Permission Audit:** Attached policies aur user memberships ko CLI se audit karke verify kiya.
+## 3. Step-by-Step Implementation
+1. **IAM User & Group Provisioning:** Created a dedicated IAM user and an engineering IAM group via AWS CLI, then added the user to the group.
+2. **Policy Assignment:** Attached read-only service policies (`AmazonEC2ReadOnlyAccess`) at the group level for scalable governance.
+3. **Access Audit:** Verified group memberships and attached policy ARNs using IAM CLI inspection commands.
 
-## 4. Commands Executed & Unka Kaam
+## 4. Commands Executed & Purpose
 1. `aws iam create-user --user-name amrish-dev-user`
-   - **Kaam:** AWS IAM mein ek naya non-root user create karta hai.
+   - **Purpose:** Creates a dedicated non-root IAM user in AWS.
 2. `aws iam create-group --group-name devops-engineers && aws iam add-user-to-group --user-name amrish-dev-user --group-name devops-engineers`
-   - **Kaam:** IAM group create karke user ko group membership assign karta hai.
+   - **Purpose:** Creates an IAM group and assigns the user to that group.
 3. `aws iam attach-group-policy --group-name devops-engineers --policy-arn arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess`
-   - **Kaam:** Group par least-privilege managed IAM policy attach karta hai.
+   - **Purpose:** Grants least-privilege EC2 read-only permissions to all members of the group.
 4. `aws iam list-attached-group-policies --group-name devops-engineers --output table`
-   - **Kaam:** Group par active sabhi IAM policies ki table print karke verify karta hai.
+   - **Purpose:** Audits and confirms all IAM policies currently attached to the group.
 
-## 5. Expected Output / Verification
-- `list-attached-group-policies` output mein exact policy ARN aur name confirm hota hai, aur user sirf allowed AWS actions hi perform kar pata hai.
+## 5. Expected Output & Verification
+- `list-attached-group-policies` confirms the exact policy ARN attached to `devops-engineers`, restricting the user strictly to authorized read operations.

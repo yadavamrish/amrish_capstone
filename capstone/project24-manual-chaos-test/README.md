@@ -1,23 +1,23 @@
 # Project 24: Controlled Chaos Testing & Incident Recovery Runbook
 
 ## 1. Project Overview & Goal
-Production resilience validate karne ke liye controlled service failure inject karna (`systemctl stop nginx`), outage impact (`HTTP 000`) observe karna, service restore karna (`systemctl start nginx`), aur exact timestamps ke saath complete incident timeline (`INCIDENT_NOTES.md`) document karna.
+The goal of this project is to validate service resilience and incident response procedures by injecting a controlled web server outage (`systemctl stop nginx`), observing failure telemetry (`HTTP 000`), executing service recovery (`systemctl start nginx`), and documenting the full incident timeline in `INCIDENT_NOTES.md`.
 
 ## 2. Files in This Folder
-- `INCIDENT_NOTES.md` — Baseline ($T_0$), Failure Injection ($T_1$), Recovery ($T_2$), Root Cause Analysis (RCA), aur Mean Time to Recovery (MTTR) report.
+- `INCIDENT_NOTES.md` — Structured incident report documenting Baseline ($T_0$), Failure Injection ($T_1$), Recovery ($T_2$), Root Cause Analysis (RCA), and Mean Time to Recovery (MTTR).
 
-## 3. Step-by-Step Implementation (Kya & Kaise Kiya)
-1. **Baseline & Failure Injection ($T_0 \rightarrow T_1$):** Nginx ka `active` state verify karne ke baad `sudo systemctl stop nginx` run karke outage simulate kiya aur `HTTP 000` (Connection Refused) record kiya.
-2. **Service Recovery ($T_2$):** `sudo systemctl start nginx` se service restore ki aur `HTTP 200 OK` verify kiya.
-3. **Incident Documentation:** Poora timeline aur lessons learned `INCIDENT_NOTES.md` mein save kiya.
+## 3. Step-by-Step Implementation
+1. **Baseline & Failure Injection ($T_0 \rightarrow T_1$):** Verified healthy `active` Nginx status (`HTTP 200`), then intentionally stopped the `nginx` daemon to simulate a service crash (`inactive` / `HTTP 000`).
+2. **Recovery Execution ($T_2$):** Restarted the `nginx` service via `systemctl` and verified restoration of `HTTP 200 OK` responses.
+3. **Incident Documentation:** Logged exact UTC timestamps, commands, and recovery metrics inside `INCIDENT_NOTES.md`.
 
-## 4. Commands Executed & Unka Kaam
+## 4. Commands Executed & Purpose
 1. `sudo systemctl stop nginx`
-   - **Kaam:** Chaos test ke liye running Nginx web server ko manually stop (failure inject) karta hai.
+   - **Purpose:** Injects a controlled service outage by stopping the running Nginx daemon.
 2. `systemctl is-active nginx && curl -s -o /dev/null -w "%{http_code}\n" http://localhost`
-   - **Kaam:** Outage aur recovery ke dauran systemd service status (`inactive`/`active`) aur HTTP status code (`000`/`200`) check karta hai.
+   - **Purpose:** Audits systemd service state (`inactive` vs `active`) and HTTP response code (`000` vs `200`) during outage and recovery.
 3. `sudo systemctl start nginx`
-   - **Kaam:** Stopped web server ko wapas start karke service availability restore karta hai.
+   - **Purpose:** Restores the Nginx web server and brings the endpoint back online.
 
-## 5. Expected Output / Verification
-- Outage ke waqt `inactive` + `000` aur recovery ke baad `active` + `200` status milta hai, jiska poora audit log `INCIDENT_NOTES.md` mein recorded hai.
+## 5. Expected Output & Verification
+- Outage state records `inactive` + `HTTP 000`, recovery restores `active` + `HTTP 200`, and `INCIDENT_NOTES.md` captures the complete timeline.

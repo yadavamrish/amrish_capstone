@@ -1,24 +1,24 @@
 # Project 09: Reusable Modular Infrastructure as Code with Terraform
 
 ## 1. Project Overview & Goal
-Monolithic `.tf` files ke bajay reusable **Terraform Modules** (`network`, `security`, `compute`) architecture implement karna taaki ek hi infrastructure pattern ko alag-alag environments (Dev/Staging/Prod) mein DRY (Don't Repeat Yourself) principle ke saath reuse kiya ja sake.
+The goal of this project is to refactor monolithic Terraform configurations into reusable **Child Modules** (`network`, `security`, `compute`) following the DRY (Don't Repeat Yourself) principle for scalable multi-environment deployments.
 
 ## 2. Key Concepts Implemented
-- Parent/Root module aur Child modules ke beech `input variables` aur `module outputs` ka data flow.
-- Standardized formatting (`terraform fmt`) aur static validation (`terraform validate`).
+- Module encapsulation using `variables.tf` (inputs) and `outputs.tf` (exported attributes).
+- Standardized recursive formatting (`terraform fmt`) and static validation (`terraform validate`).
 
-## 3. Step-by-Step Implementation (Kya & Kaise Kiya)
-1. **Module Separation:** Networking aur Compute logic ko reusable child modules mein encapsulate kiya.
-2. **Root Composition:** Root configuration mein `module` blocks ke zariye variables pass karke dependencies link ki.
-3. **Validation & Plan:** `terraform init` se local modules register karke syntax aur execution plan verify kiya.
+## 3. Step-by-Step Implementation
+1. **Module Decomposition:** Separated networking, security groups, and compute resources into reusable child modules.
+2. **Root Module Composition:** Wired child modules together in the root configuration by passing outputs from one module as inputs to another.
+3. **Initialization & Plan Check:** Registered local modules via `terraform init` and validated syntax and execution plans.
 
-## 4. Commands Executed & Unka Kaam
+## 4. Commands Executed & Purpose
 1. `terraform init`
-   - **Kaam:** Root aur sabhi child Terraform modules ko initialize karke `.terraform/modules` mein link karta hai.
+   - **Purpose:** Initializes root and child Terraform modules and links them inside `.terraform/modules`.
 2. `terraform fmt -recursive && terraform validate`
-   - **Kaam:** Sabhi subdirectories ki `.tf` files ko format aur validate karta hai.
+   - **Purpose:** Formats all `.tf` files across subdirectories and validates module configurations.
 3. `terraform plan`
-   - **Kaam:** Modular infrastructure stack ka dry-run execution plan generate karta hai.
+   - **Purpose:** Generates a unified execution plan across all composed Terraform modules.
 
-## 5. Expected Output / Verification
-- `terraform validate` `Success! The configuration is valid.` return karta hai aur `terraform plan` sabhi modular resources cleanly list karta hai.
+## 5. Expected Output & Verification
+- `terraform validate` outputs `Success! The configuration is valid.` and `terraform plan` cleanly resolves all cross-module dependencies.
