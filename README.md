@@ -1,31 +1,31 @@
-# AWS & DevOps Capstone Portfolio (Projects 1 – 24)
-**Engineer:** Amrish Yadav (`yadavamrish` / `amrish071`) | **Cloud Region:** AWS Mumbai (`ap-south-1`)
+# AWS & DevOps Capstone Portfolio (Projects 01 – 24)
+**Engineer:** Amrish Yadav (`yadavamrish` / `amrish071`) | **Region:** AWS Mumbai (`ap-south-1`)
 
-## Complete Project Index (1 to 24) & Command Reference Guides
+## Complete Project Index (01 to 24)
 
-| # | Project Title | Core Goal | Key Tools & AWS Services | Guide |
-| :--- | :--- | :--- | :--- | :--- |
-| **01** | Linux Administration & Git Basics | Server CLI mastery, permissions, & version control | Linux Bash, `chmod`, Git, GitHub | [README](capstone/project01-linux-git-basics/README.md) |
-| **02** | AWS IAM & CLI Configuration | Programmatic AWS access & least-privilege users | AWS IAM, AWS CLI (`aws configure`) | [README](capstone/project02-aws-iam-cli-setup/README.md) |
-| **03** | EC2 Web Server Provisioning | Launch & configure Linux cloud compute instances | AWS EC2, Security Groups, Nginx | [README](capstone/project03-ec2-web-server/README.md) |
-| **04** | Custom VPC & Subnet Networking | Isolated cloud network with public/private routing | AWS VPC, Subnets, Internet Gateway, Route Tables | [README](capstone/project04-vpc-networking/README.md) |
-| **05** | S3 Static Website Hosting | Host serverless static web assets on object storage | Amazon S3, Bucket Policies | [README](capstone/project05-s3-static-hosting/README.md) |
-| **06** | Application Containerization | Package apps into portable container images | Docker, `Dockerfile`, Docker CLI | [README](capstone/project06-docker-containerization/README.md) |
-| **07** | Multi-Container Orchestration | Run multi-tier app + database stacks together | Docker Compose (`docker-compose.yml`) | [README](capstone/project07-docker-compose-multicontainer/README.md) |
-| **08** | Automated CI Pipeline | Automate code build & test checks on every push | Jenkins, `Jenkinsfile`, `systemd` | [README](capstone/project08-jenkins-ci-pipeline/README.md) |
-| **09** | Infrastructure as Code (IaC) | Provision repeatable AWS infrastructure declaratively | Terraform (`init`, `plan`, `apply`, `destroy`) | [README](capstone/project09-terraform-iac/README.md) |
-| **10** | Custom DNS & Domain Routing | Map domain names to cloud endpoints | Amazon Route 53, Hosted Zones, `dig` | [README](capstone/project10-route53-dns/README.md) |
-| **11** | GitHub Actions CI Workflow | Cloud-native CI linting, testing, & image builds | GitHub Actions (`.github/workflows/ci.yml`) | [README](capstone/project11-github-actions-ci/README.md) |
-| **12** | Private Container Registry | Store & version Docker images securely in AWS | Amazon ECR, `docker push` | [README](capstone/project12-ecr-container-registry/README.md) |
-| **13** | Amazon EKS Cluster Provisioning | Set up managed Kubernetes control plane & worker nodes | Amazon EKS, `eksctl`, `kubectl` | [README](capstone/project13-eks-cluster-setup/README.md) |
-| **14** | Kubernetes Workload Deployment | Deploy & expose scalable pods on EKS | Kubernetes Deployments, Services (`LoadBalancer`) | [README](capstone/project14-eks-app-deployment/README.md) |
-| **15** | EC2-Based Ansible Automation | Agentless configuration management across EC2 nodes | Ansible, `inventory.ini`, YAML Playbooks | [README](capstone/project15-ansible-ec2/README.md) |
-| **16** | Enable HTTPS via ACM & ALB | Enforce TLS encryption (443) & block HTTP (80) | OpenSSL, AWS ACM, Application Load Balancer | [README](capstone/project16-https-acm/README.md) |
-| **17** | Central Log Forwarding | Stream Linux app & system logs to AWS in real time | Amazon CloudWatch Agent, CloudWatch Logs | [README](capstone/project17-cloudwatch-logs/README.md) |
-| **18** | Proactive Metric Alerting | Trigger automated alerts on high CPU/error thresholds | Amazon CloudWatch Alarms, SNS | [README](capstone/project18-cloudwatch-alarms/README.md) |
-| **19** | Automated S3 Cron Backups | Scheduled daily compressed backups to S3 | Linux `cron`, `tar`, AWS S3 | [README](capstone/project19-s3-cron-backup/README.md) |
-| **20** | Load Balanced App Deployment | Multi-AZ traffic distribution with health checks | 2x EC2 (Nginx), Target Group (`/health`), ALB | [README](capstone/project20-load-balanced-app/README.md) |
-| **21** | CloudWatch Monitoring Dashboard | Real-time visualization of EC2, ALB & Log metrics | Amazon CloudWatch Dashboards | [README](capstone/project21-cloudwatch-dashboard/README.md) |
-| **22** | S3 Log Archive with Lifecycle | Lower storage costs via Glacier tiering & expiration | Amazon S3 Lifecycle Rules (`GLACIER` & Expiration) | [README](capstone/project22-s3-log-lifecycle/README.md) |
-| **23** | IAM Role Based Access | Credential-free S3 access from EC2 via IAM Roles | AWS IAM Roles, Instance Profiles, EC2 | [README](capstone/project23-iam-role-ec2/README.md) |
-| **24** | Manual Chaos Test | Simulate service outage, recover, & log incident report | `systemd` (`systemctl`), `curl`, Incident Runbook | [README](capstone/project24-manual-chaos-test/README.md) |
+| # | Project Title (Assessment Name) | Folder & Documentation |
+| :--- | :--- | :--- |
+| **01** | Terraform Webserver | [capstone/project01-terraform-webserver](capstone/project01-terraform-webserver/README.md) |
+| **02** | S3 Static Website | [capstone/project02-s3-static-website](capstone/project02-s3-static-website/README.md) |
+| **03** | EC2 Nginx Hosting | [capstone/project03-ec2-nginx-hosting](capstone/project03-ec2-nginx-hosting/README.md) |
+| **04** | VPC Custom Networking | [capstone/project04-vpc-custom-networking](capstone/project04-vpc-custom-networking/README.md) |
+| **05** | IAM Users & Policies | [capstone/project05-iam-users-policies](capstone/project05-iam-users-policies/README.md) |
+| **06** | Docker Containerization | [capstone/project06-docker-containerization](capstone/project06-docker-containerization/README.md) |
+| **07** | Docker Compose Multi-Container | [capstone/project07-docker-compose-multicontainer](capstone/project07-docker-compose-multicontainer/README.md) |
+| **08** | Jenkins CI Pipeline | [capstone/project08-jenkins-ci-pipeline](capstone/project08-jenkins-ci-pipeline/README.md) |
+| **09** | Terraform Modular IaC | [capstone/project09-terraform-modular-iac](capstone/project09-terraform-modular-iac/README.md) |
+| **10** | Internal DNS Setup | [capstone/project10-internal-dns](capstone/project10-internal-dns/README.md) |
+| **11** | Infra Branching Policy | [capstone/project11-infra-branching-policy](capstone/project11-infra-branching-policy/README.md) |
+| **12** | Terraform CI Plan | [capstone/project12-terraform-ci-plan](capstone/project12-terraform-ci-plan/README.md) |
+| **13** | CloudWatch Alarm | [capstone/project13-cloudwatch-alarm](capstone/project13-cloudwatch-alarm/README.md) |
+| **14** | EKS App Deployment | [capstone/project14-eks-app-deployment](capstone/project14-eks-app-deployment/README.md) |
+| **15** | EC2-Based Ansible | [capstone/project15-ansible-ec2](capstone/project15-ansible-ec2/README.md) |
+| **16** | Enable HTTPS using ACM | [capstone/project16-https-acm](capstone/project16-https-acm/README.md) |
+| **17** | Central Log Forwarding | [capstone/project17-cloudwatch-logs](capstone/project17-cloudwatch-logs/README.md) |
+| **18** | GitOps Infra Deployment | [capstone/project18-gitops-infra](capstone/project18-gitops-infra/README.md) |
+| **19** | S3 Cron Backups | [capstone/project19-s3-cron-backup](capstone/project19-s3-cron-backup/README.md) |
+| **20** | Load Balanced App Deployment | [capstone/project20-load-balanced-app](capstone/project20-load-balanced-app/README.md) |
+| **21** | CloudWatch Monitoring Dashboard | [capstone/project21-cloudwatch-monitoring-dashboard](capstone/project21-cloudwatch-monitoring-dashboard/README.md) |
+| **22** | S3 Log Archive with Lifecycle | [capstone/project22-s3-log-archive-with-lifecycle](capstone/project22-s3-log-archive-with-lifecycle/README.md) |
+| **23** | IAM Role Based Access | [capstone/project23-iam-role-based-access](capstone/project23-iam-role-based-access/README.md) |
+| **24** | Manual Chaos Test | [capstone/project24-manual-chaos-test](capstone/project24-manual-chaos-test/README.md) |
