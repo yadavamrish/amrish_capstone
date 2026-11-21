@@ -1,18 +1,16 @@
-# Project 11: GitHub Actions CI Workflow
+# Project 11: Infra Branching Policy
 
 ## Project Goal
-GitHub repository par har code push ya pull request ke saath cloud-native Continuous Integration (CI) checks (linting, unit testing, aur Docker build validation) ko automatically execute karna.
+Infrastructure-as-Code repository ke liye Git branching strategy (`main`, `develop`, `feat/*`, `fix/*`) aur Pull Request review rules enforce karna taaki direct unreviewed changes `main` branch par na jayein.
 
-## Kya & Kaise Kiya (Detailed Summary)
-1. **Workflow Directory & YAML Setup:** Repository ke `.github/workflows/ci.yml` mein `push` aur `pull_request` triggers (`main` branch) configure kiye.
-2. **Automated Runner Jobs:** Ubuntu GitHub-hosted runner par repository checkout (`actions/checkout`), syntax/lint checks, aur container image build verification steps add kiye.
-3. **Pipeline Execution Verification:** Code commit push karke GitHub Actions tab mein green checkmark (`Succeeded`) aur job execution logs verify kiye.
+## Kya & Kaise Kiya
+1. **Feature Branch Workflow:** Direct `main` commits ke bajay feature branches par changes develop karke PR ke through merge karne ka standard establish kiya.
+2. **CI Gate Integration:** PR raise hone par automated validation checks run karne ka workflow link kiya.
 
-## Commands Used & Unka Kaam (Detailed Reference)
-
-1. `mkdir -p .github/workflows`
-   - **Kaam:** GitHub Actions ke YAML workflow definitions store karne ke liye standard `.github/workflows` directory create karta hai.
-2. `git add .github/workflows/ci.yml && git commit -m "ci: add GitHub Actions workflow"`
-   - **Kaam:** CI workflow file ko Git staging area mein add karke local repository history mein commit karta hai.
-3. `git push origin main`
-   - **Kaam:** Workflow file ko GitHub `main` branch par push karta hai, jisse automatically cloud runner par CI workflow trigger ho jata hai.
+## Commands Used & Unka Kaam
+1. `git checkout -b feat/infra-update`
+   - **Kaam:** `main` branch se ek isolated feature branch create karta hai.
+2. `git status && git diff`
+   - **Kaam:** Branch par kiye gaye infrastructure changes ko commit se pehle review karta hai.
+3. `git push -u origin feat/infra-update`
+   - **Kaam:** Feature branch ko GitHub par push karta hai taaki Pull Request create ki ja sake.

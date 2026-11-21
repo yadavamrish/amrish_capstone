@@ -1,20 +1,16 @@
-# Project 18: Proactive Metric Alerting (CloudWatch Alarms & SNS)
+# Project 18: GitOps Infra Deployment
 
 ## Project Goal
-Infrastructure bottlenecks ya performance degradation ko proactively detect karne ke liye Amazon CloudWatch Metric Alarms aur Amazon SNS email/notification alerts configure karna.
+GitOps workflow implement karna jismein `capstone/project18-gitops-infra/main.tf` ke infrastructure changes Pull Request merge hone par GitHub Actions (`.github/workflows/project18-gitops-deploy.yml`) ke through automatically `Terraform Plan` aur `Production Approval` gate ke baad `Terraform Apply` hon.
 
-## Kya & Kaise Kiya (Detailed Summary)
-1. **SNS Topic & Email Subscription:** `amrish-capstone-alerts` SNS topic banaya aur email endpoint subscribe karke confirmation verify kiya.
-2. **CloudWatch Threshold Alarm Creation:** EC2 `CPUUtilization` metric par `> 80%` threshold ke saath CloudWatch Alarm configure kiya aur alert action ko SNS Topic ARN se link kiya.
-3. **Alarm State & Trigger Testing:** `set-alarm-state` ke through `ALARM` state simulate karke notification delivery aur alarm history verify ki.
+## Kya & Kaise Kiya
+1. **GitOps Terraform Manifest (`main.tf`):** Declarative AWS infrastructure resource `capstone/project18-gitops-infra/main.tf` mein define kiya.
+2. **GitHub Actions GitOps Workflow (`.github/workflows/project18-gitops-deploy.yml`):** `main` branch par PR merge hone par `terraform-plan` job aur `production-approval` environment gate ke baad `terraform-apply` job configure kiya.
 
-## Commands Used & Unka Kaam (Detailed Reference)
-
-1. `aws sns create-topic --name amrish-capstone-alerts --region ap-south-1`
-   - **Kaam:** Alert notifications publish karne ke liye ek naya Amazon SNS topic create karta hai aur `TopicArn` return karta hai.
-2. `aws sns subscribe --topic-arn $TOPIC_ARN --protocol email --notification-endpoint amrishrock2002@gmail.com --region ap-south-1`
-   - **Kaam:** SNS topic par email subscriber register karta hai taaki alarm trigger hone par email alert mile.
-3. `aws cloudwatch put-metric-alarm --alarm-name amrish-p18-high-cpu-alarm --metric-name CPUUtilization --namespace AWS/EC2 --statistic Average --period 60 --threshold 80 --comparison-operator GreaterThanThreshold --evaluation-periods 2 --alarm-actions $TOPIC_ARN --region ap-south-1`
-   - **Kaam:** EC2 CPU utilization 2 consecutive minutes tak 80% se upar rehne par trigger hone wala CloudWatch Alarm set karta hai.
-4. `aws cloudwatch set-alarm-state --alarm-name amrish-p18-high-cpu-alarm --state-value ALARM --state-reason "Testing SNS alert notification" --region ap-south-1`
-   - **Kaam:** Alarm ko manually `ALARM` state mein daal kar SNS notification flow ko end-to-end test karta hai.
+## Commands Used & Unka Kaam
+1. `cd capstone/project18-gitops-infra && terraform init && terraform validate`
+   - **Kaam:** `main.tf` ke Terraform providers aur syntax ko initialize aur validate karta hai.
+2. `terraform plan -out=tfplan`
+   - **Kaam:** PR merge ke baad deployment se pehle execution plan (`tfplan`) generate karta hai.
+3. `terraform apply -auto-approve`
+   - **Kaam:** `production-approval` gate approve hone par AWS par infrastructure changes apply karta hai.

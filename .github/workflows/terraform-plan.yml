@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - 'capstone/project04-vpc-custom-networking/**'
+      - 'capstone/project12-terraform-ci-plan/**'
       - '.github/workflows/terraform-plan.yml'
   workflow_dispatch:
 
@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: capstone/project04-vpc-custom-networking
+        working-directory: capstone/project12-terraform-ci-plan
 
     steps:
       - name: Checkout Repository
@@ -31,7 +31,7 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
 
-      - name: Terraform Plan (Dry-Run)
+      - name: Terraform Plan
         env:
           AWS_ACCESS_KEY_ID: mock_access_key
           AWS_SECRET_ACCESS_KEY: mock_secret_key
@@ -39,9 +39,9 @@ jobs:
         run: terraform plan -refresh=false -out=tfplan || terraform validate
 
       - name: Upload Plan Artifact
-        if: hashFiles('capstone/project04-vpc-custom-networking/tfplan') != ''
+        if: hashFiles('capstone/project12-terraform-ci-plan/tfplan') != ''
         uses: actions/upload-artifact@v4
         with:
           name: terraform-plan-artifact
-          path: capstone/project04-vpc-custom-networking/tfplan
+          path: capstone/project12-terraform-ci-plan/tfplan
           retention-days: 7

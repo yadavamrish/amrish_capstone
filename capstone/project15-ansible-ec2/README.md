@@ -1,24 +1,19 @@
-# Project 15: EC2-Based Ansible Controller & Managed Node Setup
+# Project 15: EC2-Based Ansible
 
 ## Project Goal
-Local machine SSH dependency hatakar AWS EC2-based Ansible Controller aur Managed Node architecture set up karna taaki multiple Linux servers par agentless configuration management automate ho sake.
+AWS EC2-based Ansible Controller aur Managed Node setup (`inventory.ini`) se agentless playbooks (`install_webserver.yml`, `configure-webserver.yml`) run karke web server provisioning automate karna.
 
-## Kya & Kaise Kiya (Detailed Summary)
-1. **Provisioned Controller & Managed EC2 Nodes:** AWS Mumbai (`ap-south-1`) mein 2 Ubuntu EC2 instances (`amrish-ansible-controller` aur `amrish-ansible-managed`) launch kiye jismein SSH (Port 22) aur HTTP (Port 80) allowed hain.
-2. **Configured Controller Node:** Controller instance par Ansible install kiya, `.pem` SSH private key transfer karke `chmod 400` set kiya, aur `inventory.ini` mein Managed Node IP define ki.
-3. **Executed Ad-Hoc Ping & Playbook:** `ansible all -m ping` se SSH + Python connectivity verify ki aur YAML playbook (`site.yml`) run karke Managed Node par automatically Nginx web server deploy kiya.
+## Kya & Kaise Kiya
+1. **Inventory Configuration (`inventory.ini`):** Managed EC2 instance ke IP address, SSH user (`ubuntu`), aur private key path ko `inventory.ini` mein define kiya.
+2. **Ansible Playbooks (`install_webserver.yml` & `configure-webserver.yml`):** Managed EC2 node par web server package install aur configure karne ke declarative YAML playbooks likhe.
+3. **Connectivity & Playbook Execution:** `ansible all -m ping` se SSH + Python connectivity verify ki aur `ansible-playbook` run karke web server live kiya.
 
-## Commands Used & Unka Kaam (Detailed Reference)
-
-1. `aws ec2 run-instances --image-id $AMI_ID --instance-type t3.micro --count 2 --key-name amrish-ansible-key --security-group-ids $SG_ID --region ap-south-1`
-   - **Kaam:** Ansible Controller aur Managed Node ke liye ek saath 2 Ubuntu EC2 instances launch karta hai.
-2. `scp -i amrish-ansible-key.pem amrish-ansible-key.pem ubuntu@$CONTROLLER_IP:~/`
-   - **Kaam:** Local VM se `.pem` SSH private key ko securely Ansible Controller EC2 instance par copy karta hai.
-3. `sudo apt update && sudo apt install -y ansible`
-   - **Kaam:** Controller EC2 instance par Ansible automation engine install karta hai.
-4. `chmod 400 ~/amrish-ansible-key.pem`
-   - **Kaam:** Private key par strict read-only permission set karta hai taaki Ansible SSH connection reject na ho.
-5. `ansible all -i inventory.ini -m ping`
-   - **Kaam:** `inventory.ini` mein listed sabhi managed EC2 hosts par SSH login aur Python interpreter availability test (`pong`) karta hai.
-6. `ansible-playbook -i inventory.ini site.yml`
-   - **Kaam:** Declarative YAML playbook execute karke managed EC2 node par Nginx install, start, aur custom webpage configure karta hai.
+## Commands Used & Unka Kaam
+1. `chmod 400 amrish-p15-ansible-key.pem`
+   - **Kaam:** SSH private key par secure read-only permission set karta hai.
+2. `ansible all -i capstone/project15-ansible-ec2/inventory.ini -m ping`
+   - **Kaam:** `inventory.ini` mein listed managed EC2 node par SSH connectivity test (`pong`) karta hai.
+3. `ansible-playbook -i capstone/project15-ansible-ec2/inventory.ini capstone/project15-ansible-ec2/install_webserver.yml`
+   - **Kaam:** Managed EC2 node par web server package install aur start karta hai.
+4. `ansible-playbook -i capstone/project15-ansible-ec2/inventory.ini capstone/project15-ansible-ec2/configure-webserver.yml`
+   - **Kaam:** Web server configuration aur custom HTML deployment execute karta hai.

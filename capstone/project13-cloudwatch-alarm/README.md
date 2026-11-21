@@ -1,20 +1,16 @@
-# Project 13: Amazon EKS Cluster Provisioning
+# Project 13: CloudWatch Alarm & Containerized App
 
 ## Project Goal
-Containerized workloads ko production scale par orchestrate karne ke liye AWS Mumbai (`ap-south-1`) mein ek managed Kubernetes cluster (Amazon EKS) aur worker node group provision karna.
+Containerized web workload (`Dockerfile`, `index.html`) ke saath Amazon CloudWatch Metric Alarms configure karna taaki high CPU/resource utilization par automated alerts trigger hon.
 
-## Kya & Kaise Kiya (Detailed Summary)
-1. **EKS Cluster & Node Group Creation:** `eksctl` CLI ke through managed Kubernetes control plane aur EC2 worker nodes (`t3.medium`) provision kiye.
-2. **Kubeconfig Context Setup:** `aws eks update-kubeconfig` run karke local `kubectl` CLI ko EKS API server endpoint se authenticate kiya.
-3. **Cluster Health Verification:** `kubectl get nodes` aur `kubectl get ns` se verify kiya ki sabhi worker nodes `Ready` state mein hain.
+## Kya & Kaise Kiya
+1. **Containerized Workload (`Dockerfile` & `index.html`):** Monitored web application container image build ki.
+2. **CloudWatch Metric Alarm Setup:** `CPUUtilization` threshold breach hone par SNS notification trigger karne ke liye CloudWatch Alarm configure kiya.
 
-## Commands Used & Unka Kaam (Detailed Reference)
-
-1. `eksctl create cluster --name amrish-eks-cluster --region ap-south-1 --nodegroup-name standard-workers --node-type t3.medium --nodes 2 --managed`
-   - **Kaam:** AWS par managed EKS Kubernetes control plane, VPC networking, aur 2 EC2 worker nodes ek saath provision karta hai.
-2. `aws eks update-kubeconfig --region ap-south-1 --name amrish-eks-cluster`
-   - **Kaam:** Local `~/.kube/config` file mein EKS cluster credentials aur API endpoint add karta hai taaki `kubectl` commands cluster se baat kar sakein.
-3. `kubectl cluster-info`
-   - **Kaam:** Kubernetes control plane aur CoreDNS services ke running endpoints verify karta hai.
-4. `kubectl get nodes -o wide`
-   - **Kaam:** Cluster ke sabhi EC2 worker nodes ka `Ready` status, Kubernetes version, aur internal/external IPs dikhata hai.
+## Commands Used & Unka Kaam
+1. `docker build -t amrish-p13-monitored-app:v1 capstone/project13-cloudwatch-alarm/`
+   - **Kaam:** Project 13 ke `Dockerfile` aur `index.html` se application image build karta hai.
+2. `aws cloudwatch put-metric-alarm --alarm-name amrish-p13-cpu-alarm --metric-name CPUUtilization --namespace AWS/EC2 --statistic Average --period 60 --threshold 80 --comparison-operator GreaterThanThreshold --evaluation-periods 2 --region ap-south-1`
+   - **Kaam:** CPU utilization 80% se upar jane par trigger hone wala CloudWatch Alarm create karta hai.
+3. `aws cloudwatch describe-alarms --alarm-names amrish-p13-cpu-alarm --region ap-south-1 --output table`
+   - **Kaam:** Created CloudWatch Alarm ka state (`OK` / `ALARM`) aur threshold verify karta hai.

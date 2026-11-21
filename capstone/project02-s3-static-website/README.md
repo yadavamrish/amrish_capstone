@@ -1,22 +1,18 @@
-# Project 02: AWS IAM & CLI Configuration
+# Project 02: S3 Static Website
 
 ## Project Goal
-Linux VM terminal se AWS Mumbai (`ap-south-1`) account ko securely aur programmatically manage karne ke liye AWS Command Line Interface (CLI v2) install karna aur IAM credentials configure karna.
+Terraform (`main.tf`, `provider.tf`, `outputs.tf`) ke through Amazon S3 bucket provision karke serverless static website (`index.html`) host karna.
 
-## Kya & Kaise Kiya (Detailed Summary)
-1. **AWS CLI v2 Installation:** Linux host par official AWS CLI v2 binary download aur install karke CLI version verify kiya.
-2. **IAM Credentials & Region Setup:** IAM user ki Access Key ID, Secret Access Key, default region (`ap-south-1`), aur default output format (`json`) ko `~/.aws/credentials` aur `~/.aws/config` mein save kiya.
-3. **Authentication & Identity Verification:** AWS Security Token Service (`sts`) ke through verify kiya ki CLI sahi AWS Account ID aur IAM User/Role ke saath authenticated hai.
+## Kya & Kaise Kiya
+1. **Terraform S3 Configuration (`main.tf`):** S3 bucket resource, public access block configuration, public-read bucket policy, aur `index.html` object upload define kiya.
+2. **Static Website Hosting:** S3 website endpoint configuration enable karke `outputs.tf` se live website URL output kiya.
 
-## Commands Used & Unka Kaam (Detailed Reference)
-
-1. `curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip -q awscliv2.zip && sudo ./aws/install`
-   - **Kaam:** Official AWS CLI v2 installer package download karta hai, unzip karta hai, aur Linux system mein globally install karta hai.
-2. `aws --version`
-   - **Kaam:** Installed AWS CLI ka exact version aur Python runtime verify karta hai.
-3. `aws configure`
-   - **Kaam:** Interactive prompt ke through AWS Access Key ID, Secret Access Key, default region (`ap-south-1`), aur output format (`json`) ko `~/.aws/credentials` aur `~/.aws/config` files mein store karta hai.
-4. `aws configure list`
-   - **Kaam:** Current active profile, access key source, aur configured region (`ap-south-1`) ki summary dikhata hai (bina secret key expose kiye).
-5. `aws sts get-caller-identity`
-   - **Kaam:** AWS Security Token Service (STS) API call karke current authenticated IAM User/Role ka `Account` ID, `UserId`, aur `Arn` return karta hai — yeh confirm karta hai ki credentials valid aur working hain.
+## Commands Used & Unka Kaam
+1. `cd capstone/project02-s3-static-website && terraform init`
+   - **Kaam:** S3 project directory mein Terraform aur AWS provider initialize karta hai.
+2. `terraform validate && terraform plan`
+   - **Kaam:** S3 bucket aur website configuration syntax verify karke deployment plan dikhata hai.
+3. `terraform apply -auto-approve`
+   - **Kaam:** AWS par S3 bucket create karta hai, static website hosting enable karta hai, aur `index.html` upload karta hai.
+4. `curl -i http://<S3_WEBSITE_ENDPOINT>`
+   - **Kaam:** S3 static website endpoint par HTTP request bhej kar `200 OK` response verify karta hai.

@@ -1,20 +1,18 @@
-# Project 14: Kubernetes Workload Deployment on EKS
+# Project 14: EKS App Deployment
 
 ## Project Goal
-Containerized web application ko Amazon EKS cluster par high-availability replicas ke saath deploy karna aur Kubernetes `LoadBalancer` Service ke through public internet par expose karna.
+Kubernetes `Deployment` manifest (`deployment.yaml`) aur custom frontend (`index.html`) ke through Amazon EKS cluster par scalable web application pods deploy karna.
 
-## Kya & Kaise Kiya (Detailed Summary)
-1. **Kubernetes Manifests Authoring (`deployment.yaml` & `service.yaml`):** 2+ pod replicas, container image URI, resource limits, aur `type: LoadBalancer` service define ki.
-2. **Manifest Deployment & Rollout Check:** `kubectl apply` se resources EKS par deploy kiye aur `kubectl rollout status` se zero-downtime deployment verify kiya.
-3. **External Endpoint Verification:** Provisioned AWS Classic/Network Load Balancer external hostname par HTTP request bhej kar live response test kiya.
+## Kya & Kaise Kiya
+1. **Kubernetes Deployment Manifest (`deployment.yaml`):** Multiple pod replicas, container image, aur port `80` specifications define kiye.
+2. **Cluster Rollout & Verification:** `kubectl apply -f deployment.yaml` run karke pods ke `Running` status aur rollout completion ko verify kiya.
 
-## Commands Used & Unka Kaam (Detailed Reference)
-
-1. `kubectl apply -f deployment.yaml -f service.yaml`
-   - **Kaam:** EKS cluster mein Kubernetes `Deployment` (multiple pod replicas) aur external `LoadBalancer` Service create/update karta hai.
-2. `kubectl rollout status deployment/amrish-capstone-web`
-   - **Kaam:** Real time mein monitor karta hai ki sabhi updated pods successfully schedule aur running state mein aa gaye hain ya nahi.
-3. `kubectl get pods,svc -o wide`
-   - **Kaam:** Running pods ke IP addresses aur LoadBalancer Service ka public `EXTERNAL-IP` (AWS ELB DNS) print karta hai.
-4. `curl -i http://<EXTERNAL-ELB-DNS>`
-   - **Kaam:** Kubernetes LoadBalancer endpoint par HTTP request bhej kar live containerized app response verify karta hai.
+## Commands Used & Unka Kaam
+1. `aws eks update-kubeconfig --region ap-south-1 --name amrish-eks-cluster`
+   - **Kaam:** `kubectl` CLI ko AWS EKS cluster se connect karta hai.
+2. `kubectl apply -f capstone/project14-eks-app-deployment/deployment.yaml`
+   - **Kaam:** EKS cluster mein application Deployment aur pod replicas create karta hai.
+3. `kubectl get pods -o wide`
+   - **Kaam:** Deployed pods ka `Running` status aur worker node assignment check karta hai.
+4. `kubectl rollout status deployment/amrish-capstone-app`
+   - **Kaam:** Verify karta hai ki deployment rollout bina kisi error ke complete ho gaya hai.
