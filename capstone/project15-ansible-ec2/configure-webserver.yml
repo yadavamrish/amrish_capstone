@@ -1,0 +1,23 @@
+---
+- name: Project 15 - Configure EC2 Web Server using Ansible
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Update apt cache and install Nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Deploy custom capstone HTML page
+      copy:
+        dest: /var/www/html/index.html
+        content: |
+          <h1>Project 15: EC2 Server Configured via Ansible</h1>
+          <p>Configured by Amrish Yadav (amrish071) on AWS EC2 (ap-south-1)</p>
+
+    - name: Ensure Nginx service is started and enabled
+      service:
+        name: nginx
+        state: started
+        enabled: yes

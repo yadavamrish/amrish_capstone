@@ -1,6 +1,27 @@
-**/.terraform/
+# Private Keys & SSL Certificates
+*.pem
+*.key
+*.crt
+*.ppk
+
+# Environment & Cloud Credentials
+.env
+.env.*
+.aws/
+*credentials*.csv
+
+# Terraform State & Local Cache
+.terraform/
 *.tfstate
 *.tfstate.*
-.terraform.lock.hcl
-*.swp
-*.swo
+*.tfvars
+
+# Logs & Backup Archives
+*.log
+*.tar.gz
+*.zip
+
+# System & IDE Files
+.DS_Store
+Thumbs.db
+.vscode/
