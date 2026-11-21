@@ -1,1 +1,0 @@
-# amrish_capstone
