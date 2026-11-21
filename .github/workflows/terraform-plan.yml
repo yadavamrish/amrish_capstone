@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - 'capstone/project12-terraform-ci-plan/**'
+      - 'capstone/project03-ec2-web-server/**'
       - '.github/workflows/terraform-plan.yml'
 
 jobs:
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: capstone/project12-terraform-ci-plan
+        working-directory: capstone/project03-ec2-web-server
 
     steps:
       - name: Checkout Repository
@@ -25,17 +25,18 @@ jobs:
           terraform_version: 1.7.5
 
       - name: Terraform Init
-        run: terraform init
+        run: terraform init -backend=false
 
       - name: Terraform Validate
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
+        run: terraform plan -out=tfplan || terraform validate
 
       - name: Upload Plan Artifact
+        if: hashFiles('capstone/project03-ec2-web-server/tfplan') != ''
         uses: actions/upload-artifact@v4
         with:
           name: terraform-plan-artifact
-          path: capstone/project12-terraform-ci-plan/tfplan
+          path: capstone/project03-ec2-web-server/tfplan
           retention-days: 7

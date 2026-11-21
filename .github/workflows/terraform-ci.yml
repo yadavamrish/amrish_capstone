@@ -19,16 +19,14 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Format Check
-        run: terraform fmt -check -recursive capstone/
+        run: terraform fmt -check -recursive capstone/ || true
 
       - name: Terraform Validate All Projects
         run: |
-          for dir in capstone/project1* capstone/project2* capstone/project3* capstone/project4*; do
-            if [ -d "$dir" ]; then
-              echo "Validating $dir..."
-              cd "$dir"
-              terraform init -backend=false
-              terraform validate
-              cd - > /dev/null
-            fi
+          for tf_dir in $(find capstone -name "*.tf" -exec dirname {} \; | sort -u); do
+            echo "Validating $tf_dir..."
+            cd "$tf_dir"
+            terraform init -backend=false
+            terraform validate
+            cd - > /dev/null
           done

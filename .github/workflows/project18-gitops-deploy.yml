@@ -5,7 +5,7 @@ on:
     types: [closed]
     branches: [main]
     paths:
-      - 'capstone/project18-gitops-infra/**'
+      - 'capstone/project03-ec2-web-server/**'
       - '.github/workflows/project18-gitops-deploy.yml'
   workflow_dispatch:
 
@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: capstone/project18-gitops-infra
+        working-directory: capstone/project03-ec2-web-server
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -37,7 +37,7 @@ jobs:
     environment: production-approval
     defaults:
       run:
-        working-directory: capstone/project18-gitops-infra
+        working-directory: capstone/project03-ec2-web-server
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
