@@ -1,16 +1,23 @@
-# Project 18: GitOps Infra Deployment
+# Project 18: GitOps Infrastructure Deployment with Approval Gates
 
-## Project Goal
-GitOps workflow implement karna jismein `capstone/project18-gitops-infra/main.tf` ke infrastructure changes Pull Request merge hone par GitHub Actions (`.github/workflows/project18-gitops-deploy.yml`) ke through automatically `Terraform Plan` aur `Production Approval` gate ke baad `Terraform Apply` hon.
+## 1. Project Overview & Goal
+**GitOps** deployment model implement karna jahan `capstone/project18-gitops-infra/main.tf` ke infrastructure changes Pull Request merge hone par GitHub Actions (`.github/workflows/project18-gitops-deploy.yml`) ke zariye pehle automated `Terraform Plan` check karte hain aur phir `Production Approval` environment gate pass hone ke baad apply hote hain.
 
-## Kya & Kaise Kiya
-1. **GitOps Terraform Manifest (`main.tf`):** Declarative AWS infrastructure resource `capstone/project18-gitops-infra/main.tf` mein define kiya.
-2. **GitHub Actions GitOps Workflow (`.github/workflows/project18-gitops-deploy.yml`):** `main` branch par PR merge hone par `terraform-plan` job aur `production-approval` environment gate ke baad `terraform-apply` job configure kiya.
+## 2. Files in This Folder & Workflow
+- `main.tf` — GitOps workflow ke through manage hone wala Terraform infrastructure code.
+- `.github/workflows/project18-gitops-deploy.yml` — Two-stage GitOps workflow (`terraform-plan` pre-approval check + `terraform-apply` with `production-approval` gate).
 
-## Commands Used & Unka Kaam
-1. `cd capstone/project18-gitops-infra && terraform init && terraform validate`
-   - **Kaam:** `main.tf` ke Terraform providers aur syntax ko initialize aur validate karta hai.
-2. `terraform plan -out=tfplan`
-   - **Kaam:** PR merge ke baad deployment se pehle execution plan (`tfplan`) generate karta hai.
+## 3. Step-by-Step Implementation (Kya & Kaise Kiya)
+1. **Declarative Infra Setup (`main.tf`):** Infrastructure state ko Git repository mein single source of truth ke roop mein rakha.
+2. **Approval-Gated CI/CD Workflow:** Pull Request `main` par merge hone (ya `workflow_dispatch`) par plan aur production approval pipeline configure ki.
+
+## 4. Commands Executed & Unka Kaam
+1. `cd capstone/project18-gitops-infra && terraform init -backend=false && terraform validate`
+   - **Kaam:** `main.tf` ke Terraform providers aur syntax ko validate karta hai.
+2. `terraform plan -refresh=false -out=tfplan`
+   - **Kaam:** Pre-approval stage mein infrastructure execution plan generate karta hai.
 3. `terraform apply -auto-approve`
-   - **Kaam:** `production-approval` gate approve hone par AWS par infrastructure changes apply karta hai.
+   - **Kaam:** Production environment approval milne par AWS infrastructure changes apply karta hai.
+
+## 5. Expected Output / Verification
+- GitHub Actions mein `Terraform Plan (Pre-Approval Check)` pass hone ke baad `Terraform Apply` production approval gate ke saath execute hota hai.

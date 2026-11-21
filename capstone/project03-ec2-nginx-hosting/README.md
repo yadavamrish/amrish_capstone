@@ -1,18 +1,27 @@
-# Project 03: EC2 Nginx Hosting
+# Project 03: Automated Nginx Web Server Hosting on EC2 via Terraform
 
-## Project Goal
-Terraform (`main.tf`, `provider.tf`, `outputs.tf`) ke through AWS EC2 instance provision karke us par Nginx web server deploy aur host karna.
+## 1. Project Overview & Goal
+Terraform ke zariye AWS EC2 Ubuntu virtual machine aur Security Group provision karke us par high-performance **Nginx Web Server** deploy karna aur default web traffic serve karna.
 
-## Kya & Kaise Kiya
-1. **EC2 & Security Group Manifest (`main.tf`):** Ubuntu EC2 instance, Port 22 & Port 80 Security Group, aur Nginx installation setup define kiya.
-2. **Provisioning & Output Verification:** `terraform apply` run karke `outputs.tf` se EC2 Public IP nikala aur live Nginx page verify kiya.
+## 2. Files in This Folder
+- `provider.tf` — AWS region (`ap-south-1`) provider block.
+- `main.tf` — Security Group (Ports 22 & 80) aur EC2 instance (Nginx installation user-data ke saath) define karta hai.
+- `outputs.tf` — Provisioned EC2 instance ka Public IPv4 address print karta hai.
 
-## Commands Used & Unka Kaam
+## 3. Step-by-Step Implementation (Kya & Kaise Kiya)
+1. **Infrastructure Definition (`main.tf`):** Ubuntu EC2 instance ke saath HTTP (Port 80) aur SSH (Port 22) firewall rules configure kiye.
+2. **Automated Nginx Setup:** Instance boot script mein `apt update && apt install -y nginx` aur service enablement add ki.
+3. **Apply & Live Check:** `terraform apply` run karke Public IP par Nginx landing page verify kiya.
+
+## 4. Commands Executed & Unka Kaam
 1. `cd capstone/project03-ec2-nginx-hosting && terraform init`
-   - **Kaam:** Terraform provider plugins initialize karta hai.
+   - **Kaam:** Terraform working directory aur AWS provider plugins setup karta hai.
 2. `terraform validate && terraform plan`
-   - **Kaam:** `main.tf` aur `outputs.tf` configuration validate karke execution preview dikhata hai.
+   - **Kaam:** Configuration syntax check karke resources creation plan dikhata hai.
 3. `terraform apply -auto-approve`
-   - **Kaam:** AWS par EC2 instance launch karke Nginx web server host karta hai.
+   - **Kaam:** AWS par EC2 instance launch karta hai aur Nginx web server start karta hai.
 4. `curl -i http://<EC2_PUBLIC_IP>`
-   - **Kaam:** Nginx server ke Public IP par `200 OK` HTTP response verify karta hai.
+   - **Kaam:** Nginx server ke Public IP par HTTP `200 OK` response verify karta hai.
+
+## 5. Expected Output / Verification
+- Public IP par `curl` karne par `Server: nginx` header ke saath `HTTP/1.1 200 OK` response milta hai.
