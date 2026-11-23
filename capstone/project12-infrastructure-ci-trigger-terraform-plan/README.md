@@ -1,24 +1,20 @@
-# Project 12: Automated Terraform Plan CI with GitHub Actions
+# Project 12: Infrastructure CI Trigger (Terraform Plan)
 
-## 1. Project Overview & Goal
-The goal of this project is to automate Terraform validation and execution plan generation on every push to `main` using a **GitHub Actions CI Workflow** (`.github/workflows/terraform-plan.yml`) targeting `capstone/project12-terraform-ci-plan/main.tf`.
+## Goal
+Automatically run `terraform plan` inside a CI pipeline on every push to preview infrastructure changes before applying.
 
-## 2. Files in This Folder & Workflow
-- `main.tf` — Declarative Terraform infrastructure definition validated by the CI pipeline.
-- `.github/workflows/terraform-plan.yml` — Path-triggered GitHub Actions workflow running `terraform init`, `terraform validate`, `terraform plan -out=tfplan`, and artifact upload.
+## Steps Performed
+1. Configured a GitHub Actions workflow (`.github/workflows/terraform-plan.yml`) triggered on push/PR events.
+2. Added AWS credentials via GitHub Encrypted Secrets (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`).
+3. Configured pipeline steps to run `terraform init`, `terraform validate`, and `terraform plan -no-color`.
+4. Verified successful execution and plan output in the GitHub Actions job logs.
 
-## 3. Step-by-Step Implementation
-1. **Terraform Configuration (`main.tf`):** Authored clean HCL infrastructure resources inside `capstone/project12-terraform-ci-plan/main.tf`.
-2. **GitHub Actions CI Pipeline:** Configured `hashicorp/setup-terraform@v3` to initialize providers, validate syntax, generate `tfplan`, and upload the plan artifact via `actions/upload-artifact@v4`.
-3. **CI Execution Verification:** Pushed changes to `main` and verified green checkmarks in the GitHub Actions workflow run.
+## Commands Used & Their Purpose
+| Command | Purpose |
+| :--- | :--- |
+| `terraform init` | Initializes backend and AWS provider inside the CI runner. |
+| `terraform plan -no-color` | Generates a clean, readable execution plan showing resources to add/change/destroy. |
+| `git push origin main` | Triggers the automated CI pipeline run on GitHub. |
 
-## 4. Commands Executed & Purpose
-1. `cd capstone/project12-terraform-ci-plan && terraform init -backend=false`
-   - **Purpose:** Initializes Terraform providers on the CI runner without requiring remote backend credentials.
-2. `terraform validate`
-   - **Purpose:** Validates HCL syntax and resource configurations inside `main.tf`.
-3. `terraform plan -refresh=false -out=tfplan`
-   - **Purpose:** Generates a binary Terraform execution plan artifact (`tfplan`).
-
-## 5. Expected Output & Verification
-- The **Project 12 - Terraform Plan CI** GitHub Actions workflow completes with a green checkmark (`✓`) and uploads `terraform-plan-artifact`.
+## Deliverables
+- GitHub Actions job success screenshot displaying `terraform plan` output (`screenshots/`)

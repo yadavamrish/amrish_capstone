@@ -1,23 +1,26 @@
-# Project 24: Controlled Chaos Testing & Incident Recovery Runbook
+# Project 24: Manual Chaos Test
 
-## 1. Project Overview & Goal
-The goal of this project is to validate service resilience and incident response procedures by injecting a controlled web server outage (`systemctl stop nginx`), observing failure telemetry (`HTTP 000`), executing service recovery (`systemctl start nginx`), and documenting the full incident timeline in `INCIDENT_NOTES.md`.
+## Goal
+Simulate a service outage, execute manual recovery procedures, and document incident response notes and recovery verification.
 
-## 2. Files in This Folder
-- `INCIDENT_NOTES.md` — Structured incident report documenting Baseline ($T_0$), Failure Injection ($T_1$), Recovery ($T_2$), Root Cause Analysis (RCA), and Mean Time to Recovery (MTTR).
+## Steps Performed
+1. Checked baseline health of the running web service (`nginx`) and confirmed `HTTP 200 OK`.
+2. Intentionally stopped the `nginx` service (`systemctl stop nginx`) to simulate an unexpected application crash.
+3. Observed service failure (`Connection refused` / unhealthy status), recorded downtime timestamp, and restarted the service (`systemctl start nginx`).
+4. Verified full recovery (`active (running)` and `HTTP 200 OK`) and documented incident notes.
 
-## 3. Step-by-Step Implementation
-1. **Baseline & Failure Injection ($T_0 \rightarrow T_1$):** Verified healthy `active` Nginx status (`HTTP 200`), then intentionally stopped the `nginx` daemon to simulate a service crash (`inactive` / `HTTP 000`).
-2. **Recovery Execution ($T_2$):** Restarted the `nginx` service via `systemctl` and verified restoration of `HTTP 200 OK` responses.
-3. **Incident Documentation:** Logged exact UTC timestamps, commands, and recovery metrics inside `INCIDENT_NOTES.md`.
+## Commands Used & Their Purpose
+| Command | Purpose |
+| :--- | :--- |
+| `sudo systemctl status nginx` | Checks baseline service health before injecting failure. |
+| `sudo systemctl stop nginx` | Simulates a service outage by forcefully stopping the web server. |
+| `curl -I http://localhost` | Confirms service unavailability (`Failed to connect`) during the chaos test. |
+| `sudo systemctl start nginx && sudo systemctl status nginx` | Restarts the failed service and verifies it returns to `active (running)`. |
 
-## 4. Commands Executed & Purpose
-1. `sudo systemctl stop nginx`
-   - **Purpose:** Injects a controlled service outage by stopping the running Nginx daemon.
-2. `systemctl is-active nginx && curl -s -o /dev/null -w "%{http_code}\n" http://localhost`
-   - **Purpose:** Audits systemd service state (`inactive` vs `active`) and HTTP response code (`000` vs `200`) during outage and recovery.
-3. `sudo systemctl start nginx`
-   - **Purpose:** Restores the Nginx web server and brings the endpoint back online.
+## Incident Notes
+- **Fault Injected:** Stopped `nginx` web server daemon manually to test failure detection and recovery SOP.
+- **Impact:** HTTP traffic on port 80 returned connection refused during the outage window.
+- **Resolution & Recovery:** Restarted `nginx` via `systemctl`; verified service status `active (running)` and `HTTP 200 OK` response within < 1 minute.
 
-## 5. Expected Output & Verification
-- Outage state records `inactive` + `HTTP 000`, recovery restores `active` + `HTTP 200`, and `INCIDENT_NOTES.md` captures the complete timeline.
+## Deliverables
+- Incident notes and recovery verification screenshots (`screenshots/`)

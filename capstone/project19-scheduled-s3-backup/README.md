@@ -1,25 +1,22 @@
-# Project 19: Automated Log & File Backups to S3 via Linux Cron
+# Project 19: Scheduled S3 Backup
 
-## 1. Project Overview & Goal
-The goal of this project is to automate disaster recovery backups by compressing application logs and critical files into timestamped `.tar.gz` archives via a bash script (`backup_logs_to_s3.sh`) and uploading them to **Amazon S3** on a recurring schedule using Linux **cron**.
+## Goal
+Automate scheduled daily backups of server logs to an Amazon S3 bucket using a Linux `cron` job.
 
-## 2. Files in This Folder
-- `backup_logs_to_s3.sh` — Executable shell script that creates a timestamped `.tar.gz` archive, uploads it to S3 via `aws s3 cp`, and cleans up temporary local files.
+## Steps Performed
+1. Created a backup Bash script (`backup_logs.sh`) that compresses `/var/log` files with a timestamp and uploads them to S3.
+2. Made the script executable (`chmod +x`) and tested it manually.
+3. Added a `crontab` schedule entry to run the backup automatically every day.
+4. Verified the uploaded `.tar.gz` backup archives inside the S3 bucket.
 
-## 3. Step-by-Step Implementation
-1. **Backup Script Authoring (`backup_logs_to_s3.sh`):** Built a shell script with timestamp formatting, `tar -czf` compression, S3 upload, and status logging.
-2. **Cron Scheduling:** Registered a scheduled cron entry in `crontab` to execute the backup script automatically without manual intervention.
-3. **S3 Bucket Verification:** Executed the script and verified uploaded `.tar.gz` archives inside the target S3 bucket.
+## Commands Used & Their Purpose
+| Command | Purpose |
+| :--- | :--- |
+| `tar -czf /tmp/logs-$(date +%F).tar.gz /var/log/nginx` | Compresses server log files into a dated `.tar.gz` archive. |
+| `aws s3 cp /tmp/logs-*.tar.gz s3://<BACKUP-BUCKET>/logs/` | Uploads the compressed log archive to the target Amazon S3 bucket. |
+| `crontab -e` | Opens the user cron table to schedule `0 2 * * * /home/ubuntu/backup_logs.sh`. |
+| `aws s3 ls s3://<BACKUP-BUCKET>/logs/` | Lists backed-up archive files stored in S3 as verification. |
 
-## 4. Commands Executed & Purpose
-1. `chmod +x capstone/project19-s3-cron-backup/backup_logs_to_s3.sh`
-   - **Purpose:** Grants execution permissions to the backup shell script.
-2. `./capstone/project19-s3-cron-backup/backup_logs_to_s3.sh`
-   - **Purpose:** Compresses logs into a `.tar.gz` archive and uploads it to Amazon S3.
-3. `crontab -l`
-   - **Purpose:** Lists active user cron jobs to verify the scheduled backup entry.
-4. `aws s3 ls s3://<BACKUP_BUCKET>/ --recursive --human-readable`
-   - **Purpose:** Confirms that compressed `.tar.gz` backup objects exist in the S3 bucket with expected file sizes.
-
-## 5. Expected Output & Verification
-- Timestamped `.tar.gz` archives appear in S3 and `crontab -l` displays the scheduled backup job.
+## Deliverables
+- Backup script (`backup_logs.sh`) and crontab entry
+- Screenshot of S3 bucket showing uploaded backup files (`screenshots/`)

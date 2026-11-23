@@ -1,24 +1,21 @@
-# Project 09: Reusable Modular Infrastructure as Code with Terraform
+# Project 9: Domain Controller Setup
 
-## 1. Project Overview & Goal
-The goal of this project is to refactor monolithic Terraform configurations into reusable **Child Modules** (`network`, `security`, `compute`) following the DRY (Don't Repeat Yourself) principle for scalable multi-environment deployments.
+## Goal
+Configure Windows Server Active Directory Domain Services (AD DS) and verify domain user authentication.
 
-## 2. Key Concepts Implemented
-- Module encapsulation using `variables.tf` (inputs) and `outputs.tf` (exported attributes).
-- Standardized recursive formatting (`terraform fmt`) and static validation (`terraform validate`).
+## Steps Performed
+1. Installed the **Active Directory Domain Services (AD DS)** role on Windows Server via Server Manager.
+2. Promoted the server to a Primary Domain Controller by creating a new forest (`capstone.local`).
+3. Created two domain user accounts (`amrish1` and `amrish2`) inside Active Directory Users and Computers.
+4. Verified domain login authentication for both users using `whoami` and `runas`.
 
-## 3. Step-by-Step Implementation
-1. **Module Decomposition:** Separated networking, security groups, and compute resources into reusable child modules.
-2. **Root Module Composition:** Wired child modules together in the root configuration by passing outputs from one module as inputs to another.
-3. **Initialization & Plan Check:** Registered local modules via `terraform init` and validated syntax and execution plans.
+## Commands Used & Their Purpose
+| Command | Purpose |
+| :--- | :--- |
+| `net user /domain` | Lists all Active Directory domain user accounts (`amrish1`, `amrish2`). |
+| `net user amrish1 "CapStone@2026!" /domain /active:yes` | Sets/resets the domain user password compliant with AD complexity policy and enables the account. |
+| `whoami` | Displays the currently logged-in domain user in `CAPSTONE\username` format. |
+| `runas /user:CAPSTONE\amrish1 "cmd /k whoami"` | Authenticates as the domain user and opens a verified domain session. |
 
-## 4. Commands Executed & Purpose
-1. `terraform init`
-   - **Purpose:** Initializes root and child Terraform modules and links them inside `.terraform/modules`.
-2. `terraform fmt -recursive && terraform validate`
-   - **Purpose:** Formats all `.tf` files across subdirectories and validates module configurations.
-3. `terraform plan`
-   - **Purpose:** Generates a unified execution plan across all composed Terraform modules.
-
-## 5. Expected Output & Verification
-- `terraform validate` outputs `Success! The configuration is valid.` and `terraform plan` cleanly resolves all cross-module dependencies.
+## Deliverables
+- Login proof screenshots showing `capstone\amrish1` and `capstone\amrish2` (`screenshots/`)

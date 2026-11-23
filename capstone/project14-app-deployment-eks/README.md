@@ -1,26 +1,22 @@
-# Project 14: Scalable Kubernetes Workload Deployment on Amazon EKS
+# Project 14: App Deployment using EKS
 
-## 1. Project Overview & Goal
-The goal of this project is to deploy a scalable, self-healing containerized web application (`deployment.yaml` and `index.html`) onto an **Amazon Elastic Kubernetes Service (EKS)** cluster and verify pod rollout health.
+## Goal
+Provision an Amazon EKS Kubernetes cluster, deploy a containerized web application, and expose it publicly.
 
-## 2. Files in This Folder
-- `deployment.yaml` — Kubernetes `Deployment` manifest defining replica count, container image, labels, and container port `80`.
-- `index.html` — Web frontend served by the deployed Kubernetes pods.
+## Steps Performed
+1. Provisioned an Amazon EKS cluster and managed worker node group using `eksctl` / Terraform.
+2. Updated local `kubeconfig` to connect `kubectl` to the EKS cluster.
+3. Applied Kubernetes `Deployment` and `Service` (`type: LoadBalancer`) manifests.
+4. Verified pod status and accessed the application via the AWS LoadBalancer external DNS.
 
-## 3. Step-by-Step Implementation
-1. **Kubeconfig Authentication:** Configured `kubectl` to connect to the `ap-south-1` Amazon EKS cluster.
-2. **Deployment Rollout:** Applied `deployment.yaml` to schedule pod replicas across EKS worker nodes.
-3. **Pod & Rollout Verification:** Verified `Running` pod statuses and zero-downtime rollout completion via `kubectl`.
+## Commands Used & Their Purpose
+| Command | Purpose |
+| :--- | :--- |
+| `aws eks update-kubeconfig --region ap-south-1 --name capstone-eks` | Configures `kubectl` credentials to communicate with the EKS cluster. |
+| `kubectl apply -f deployment.yaml` | Deploys application pods and replica sets onto EKS worker nodes. |
+| `kubectl apply -f service.yaml` | Creates a `LoadBalancer` service to expose the pods publicly. |
+| `kubectl get pods,svc` | Checks running pod status and retrieves the external `EXTERNAL-IP` URL. |
 
-## 4. Commands Executed & Purpose
-1. `aws eks update-kubeconfig --region ap-south-1 --name amrish-eks-cluster`
-   - **Purpose:** Updates `~/.kube/config` with EKS cluster credentials so `kubectl` can communicate with the Kubernetes API server.
-2. `kubectl apply -f capstone/project14-eks-app-deployment/deployment.yaml`
-   - **Purpose:** Creates or updates the Kubernetes `Deployment` and schedules application pods.
-3. `kubectl get pods -o wide`
-   - **Purpose:** Lists all running pods, their internal IPs, and assigned worker nodes.
-4. `kubectl rollout status deployment/amrish-capstone-app`
-   - **Purpose:** Monitors and confirms successful rollout completion across all replicas.
-
-## 5. Expected Output & Verification
-- `kubectl get pods` shows all replicas in `1/1 Running` state, and `kubectl rollout status` confirms `successfully rolled out`.
+## Deliverables
+- Kubernetes manifests (`deployment.yaml`, `service.yaml`)
+- Screenshot of public application access via LoadBalancer URL (`screenshots/`)

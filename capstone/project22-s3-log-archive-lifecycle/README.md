@@ -1,21 +1,19 @@
-# Project 22: Cost-Optimized S3 Log Archiving with Lifecycle Rules
+# Project 22: S3 Log Archive with Lifecycle
 
-## 1. Project Overview & Goal
-The goal of this project is to archive historical logs into an Amazon S3 bucket (`archive-logs/` prefix) and apply automated **S3 Lifecycle Management Rules** (`lifecycle-policy.json`) to transition logs to **Amazon S3 Glacier** after 30 days and automatically expire (delete) them after 90 days to minimize long-term storage costs.
+## Goal
+Automate log storage cost optimization and retention by configuring an Amazon S3 Lifecycle expiration rule.
 
-## 2. Files in This Folder
-- `lifecycle-policy.json` — Defines the `amrish-p22-log-archive-expiration-rule` transitioning objects under `archive-logs/` to `GLACIER` at 30 days and expiring them at 90 days.
+## Steps Performed
+1. Uploaded application/server log files into an S3 bucket (`logs/` prefix).
+2. Created an S3 Lifecycle Configuration rule scoped to the `logs/` prefix.
+3. Configured automatic transition to Infrequent Access / Glacier and permanent **Expiration** after 30 days.
+4. Verified the active Lifecycle rule status in the S3 Management tab.
 
-## 3. Step-by-Step Implementation
-1. **Archive Bucket & Log Upload:** Created a dedicated S3 archive bucket in `ap-south-1` and uploaded compressed `.tar.gz` and raw log files under `archive-logs/`.
-2. **Lifecycle Policy Application:** Applied `lifecycle-policy.json` to the bucket using `aws s3api put-bucket-lifecycle-configuration`.
-3. **Rule Verification:** Verified active Glacier transition and expiration intervals via CLI and S3 Management Console.
+## Commands Used & Their Purpose
+| Command | Purpose |
+| :--- | :--- |
+| `aws s3 cp app.log s3://<BUCKET-NAME>/logs/app.log` | Uploads log files into the `logs/` prefix of the S3 bucket. |
+| `aws s3api get-bucket-lifecycle-configuration --bucket <BUCKET-NAME>` | Displays the active S3 lifecycle transition and expiration rules in JSON format. |
 
-## 4. Commands Executed & Purpose
-1. `aws s3api put-bucket-lifecycle-configuration --bucket $ARCHIVE_BUCKET --lifecycle-configuration file://capstone/project22-s3-log-archive-with-lifecycle/lifecycle-policy.json`
-   - **Purpose:** Applies the automated 30-day Glacier transition and 90-day expiration lifecycle rule to the S3 bucket.
-2. `aws s3api get-bucket-lifecycle-configuration --bucket $ARCHIVE_BUCKET --output table`
-   - **Purpose:** Retrieves and verifies the active lifecycle rule status (`Enabled`), prefix filter, and day thresholds.
-
-## 5. Expected Output & Verification
-- S3 Bucket -> Management -> Lifecycle rules displays `amrish-p22-log-archive-expiration-rule` in `Enabled` status.
+## Deliverables
+- Screenshot of the S3 Lifecycle Expiration rule configuration (`screenshots/`)
