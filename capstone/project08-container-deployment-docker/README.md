@@ -1,23 +1,23 @@
-# Project 08: CI Pipeline & Containerized Web Application Build
+# Project 8: Container Deployment with Docker
 
-## 1. Project Overview & Goal
-The goal of this project is to automate the build and validation of a containerized web application (`Dockerfile` and `index.html`) through a Continuous Integration (CI) workflow so every code update is automatically packaged and smoke-tested.
+## Goal
+Containerize a web application using a `Dockerfile` and run it locally in a Docker container.
 
-## 2. Files in This Folder
-- `Dockerfile` — Instructions to package `index.html` into a lightweight web server container image.
-- `index.html` — HTML webpage built and verified during the CI pipeline execution.
+## Steps Performed
+1. Created a `Dockerfile` based on `nginx:alpine` (or lightweight web image) copying custom HTML/app files into the container.
+2. Built the Docker image locally using `docker build`.
+3. Ran the container in detached mode mapping host port `8085` to container port `80`.
+4. Verified container status and accessed the containerized app locally.
 
-## 3. Step-by-Step Implementation
-1. **Build Context Preparation:** Organized `Dockerfile` and `index.html` for repeatable container builds.
-2. **CI Build & Smoke Test:** Executed automated build steps (`Checkout -> Build Image -> Run Smoke Test`) to verify image creation and HTTP availability.
+## Commands Used & Their Purpose
+| Command | Purpose |
+| :--- | :--- |
+| `docker build -t capstone-web:v1 .` | Builds a Docker image tagged `capstone-web:v1` from the local `Dockerfile`. |
+| `docker images` | Lists locally built Docker images and verifies image size/tag. |
+| `docker run -d --name web-container -p 8085:80 capstone-web:v1` | Starts the container in background (`-d`) and maps port `8085` to `80`. |
+| `docker ps` | Verifies that the container is actively running (`Up`). |
+| `curl http://localhost:8085` | Tests the live web application running inside the Docker container. |
 
-## 4. Commands Executed & Purpose
-1. `docker build -t amrish-p08-ci-web:latest capstone/project08-jenkins-ci-pipeline/`
-   - **Purpose:** Builds the Docker image from `Dockerfile` and `index.html`.
-2. `docker run -d -p 8088:80 --name p08-ci-test amrish-p08-ci-web:latest`
-   - **Purpose:** Starts a temporary container from the newly built CI image for automated verification.
-3. `curl -i http://localhost:8088`
-   - **Purpose:** Executes a smoke test confirming `HTTP 200 OK` and proper rendering of `index.html`.
-
-## 5. Expected Output & Verification
-- The CI build completes with zero errors and the smoke test container responds with `HTTP/1.1 200 OK`.
+## Deliverables
+- `Dockerfile` and application files
+- Screenshot of running container and webpage output (`screenshots/`)

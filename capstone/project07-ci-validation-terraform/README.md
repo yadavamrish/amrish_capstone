@@ -1,26 +1,23 @@
-# Project 07: Multi-Container Orchestration with Docker Compose
+# Project 7: CI Validation for Terraform
 
-## 1. Project Overview & Goal
-The goal of this project is to orchestrate a multi-service application stack (Web Application + Backend Database/Cache) using a declarative `docker-compose.yml` file with isolated bridge networking and persistent storage volumes.
+![Terraform CI Validation](https://github.com/yadavamrish/amrish_capstone/actions/workflows/terraform-ci.yml/badge.svg)
 
-## 2. Key Concepts Implemented
-- Multi-container service definitions (`services`, `networks`, `volumes`, `depends_on`).
-- Internal DNS service discovery and single-command lifecycle management.
+## Goal
+Automate Infrastructure as Code (IaC) formatting and validation checks on every push using GitHub Actions.
 
-## 3. Step-by-Step Implementation
-1. **Compose Stack Configuration:** Defined interdependent services, environment variables, and custom networks in `docker-compose.yml`.
-2. **Multi-Container Startup:** Built and launched all services simultaneously in detached mode.
-3. **Stack Inspection & Cleanup:** Verified container health and inter-service connectivity before performing a clean teardown.
+## Steps Performed
+1. Created a GitHub Actions workflow file (`.github/workflows/terraform-ci.yml`) triggered on `push` events.
+2. Configured workflow steps to checkout code, setup Terraform CLI, run `terraform fmt -check`, `terraform init -backend=false`, and `terraform validate`.
+3. Added the live GitHub Actions workflow status badge to `README.md` and pushed changes to trigger the pipeline.
 
-## 4. Commands Executed & Purpose
-1. `docker compose config`
-   - **Purpose:** Validates YAML syntax and variable interpolation inside `docker-compose.yml`.
-2. `docker compose up -d --build`
-   - **Purpose:** Builds service images and starts all containers within an isolated bridge network.
-3. `docker compose ps`
-   - **Purpose:** Displays the running status and port mappings of all Compose-managed containers.
-4. `docker compose down -v`
-   - **Purpose:** Stops and removes all stack containers, networks, and attached volumes.
+## Commands Used & Their Purpose
+| Command | Purpose |
+| :--- | :--- |
+| `terraform fmt -check -recursive` | Fails the CI pipeline if any `.tf` file is not properly formatted. |
+| `terraform init -backend=false` | Initializes Terraform plugins in CI without requiring remote AWS credentials. |
+| `terraform validate` | Validates Terraform syntax and resource attribute configurations automatically. |
+| `git add . && git commit -m "Add Terraform CI" && git push` | Pushes workflow and Terraform code to trigger the GitHub Actions pipeline. |
 
-## 5. Expected Output & Verification
-- All defined services reach `Up` status and communicate seamlessly over internal Docker DNS service names.
+## Deliverables
+- Passing GitHub Actions CI pipeline screenshot (`screenshots/`)
+- Workflow status badge in `README.md`

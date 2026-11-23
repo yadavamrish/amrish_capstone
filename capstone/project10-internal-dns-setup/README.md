@@ -1,24 +1,22 @@
-# Project 10: Private Internal DNS Setup with Amazon Route 53
+# Project 10: Internal DNS Setup
 
-## 1. Project Overview & Goal
-The goal of this project is to configure an **Amazon Route 53 Private Hosted Zone** associated with a custom VPC to enable internal DNS service discovery (e.g., `app.amrish.internal`) instead of relying on hardcoded private IP addresses.
+## Goal
+Deploy an internal DNS server and resolve internal web server hostnames to private IP addresses.
 
-## 2. Key Concepts Implemented
-- VPC-bound Route 53 Private Hosted Zone (`amrish.internal`).
-- Internal `A` and `CNAME` DNS record management and `dig` resolution verification.
+## Steps Performed
+1. Installed and configured **BIND9** DNS server on Ubuntu Linux.
+2. Defined a forward lookup zone (`amrish.local`) in `/etc/bind/named.conf.local`.
+3. Created the zone file (`/etc/bind/db.amrish.local`) with `NS` and `A` records mapping `web.amrish.local` to `10.5.1.250`.
+4. Validated DNS configuration syntax, restarted `bind9`, and tested hostname resolution using `nslookup`.
 
-## 3. Step-by-Step Implementation
-1. **Private Hosted Zone Creation:** Created a Private Hosted Zone in Route 53 linked to the target VPC ID in `ap-south-1`.
-2. **Internal Record Mapping:** Added internal `A` records mapping service domain names to private EC2 IP addresses.
-3. **DNS Resolution Testing:** Queried internal hostnames from within the VPC using `dig` to confirm accurate resolution.
+## Commands Used & Their Purpose
+| Command | Purpose |
+| :--- | :--- |
+| `sudo apt-get install -y bind9 bind9utils dnsutils` | Installs the BIND9 DNS server and DNS lookup utilities (`nslookup`, `dig`). |
+| `sudo named-checkconf` | Validates `/etc/bind/named.conf` syntax for configuration errors. |
+| `sudo named-checkzone amrish.local /etc/bind/db.amrish.local` | Verifies the zone file records and serial number syntax. |
+| `sudo systemctl restart bind9` | Reloads BIND9 service to apply the new DNS zone and A records. |
+| `nslookup web.amrish.local 127.0.0.1` | Queries the local DNS server to prove `web.amrish.local` resolves to `10.5.1.250`. |
 
-## 4. Commands Executed & Purpose
-1. `aws route53 create-hosted-zone --name amrish.internal --vpc VPCRegion=ap-south-1,VPCId=$VPC_ID --caller-reference $(date +%s)`
-   - **Purpose:** Creates a VPC-scoped Route 53 Private Hosted Zone for internal domain resolution.
-2. `aws route53 list-hosted-zones --output table`
-   - **Purpose:** Lists active Hosted Zones and confirms private zone configuration.
-3. `dig +short app.amrish.internal`
-   - **Purpose:** Resolves the internal domain name and verifies it returns the expected private IPv4 address.
-
-## 5. Expected Output & Verification
-- `dig +short app.amrish.internal` resolves directly to the target internal private IP address inside the VPC.
+## Deliverables
+- `nslookup` resolution proof screenshot (`screenshots/`)

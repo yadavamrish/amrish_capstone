@@ -1,25 +1,20 @@
-# Project 17: Real-Time Central Log Forwarding to AWS CloudWatch
+# Project 17: Log Forwarding to CloudWatch
 
-## 1. Project Overview & Goal
-The goal of this project is to install and configure the **Amazon CloudWatch Agent** (`amazon-cloudwatch-agent.json`) on a Linux host to stream local application logs (`/var/log/amrish-capstone/app.log`) and system logs (`/var/log/syslog`) in real time to **AWS CloudWatch Logs (`ap-south-1`)**.
+## Goal
+Forward Linux/application logs from an EC2 instance to Amazon CloudWatch Logs for centralized monitoring.
 
-## 2. Files in This Folder
-- `amazon-cloudwatch-agent.json` — CloudWatch Agent configuration mapping local log file paths to CloudWatch Log Groups (`/amrish-capstone/project17-app-logs` and `/amrish-capstone/project17-syslog`) with a 7-day retention policy.
+## Steps Performed
+1. Attached an IAM role with `CloudWatchAgentServerPolicy` to the EC2 instance.
+2. Installed the `amazon-cloudwatch-agent` package on the Linux server.
+3. Configured `/opt/aws/amazon-cloudwatch-agent/bin/config.json` to ship `/var/log/syslog` and `/var/log/nginx/access.log` to a CloudWatch Log Group.
+4. Started the CloudWatch Agent and verified real-time log streams in the AWS CloudWatch console.
 
-## 3. Step-by-Step Implementation
-1. **CloudWatch Agent Installation:** Installed the official `amazon-cloudwatch-agent.deb` package on the Linux host.
-2. **Agent JSON Configuration:** Defined log file paths, stream names, log groups, and 7-day retention inside `amazon-cloudwatch-agent.json`.
-3. **Service Execution & Stream Verification:** Started the agent in `onPremise` mode, generated timestamped log entries, and verified real-time ingestion in CloudWatch Logs.
+## Commands Used & Their Purpose
+| Command | Purpose |
+| :--- | :--- |
+| `sudo apt-get install -y amazon-cloudwatch-agent` | Installs the official AWS CloudWatch Logs agent on Ubuntu. |
+| `sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json` | Loads the log-forwarding configuration and starts the agent service. |
+| `sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -m ec2 -a status` | Confirms the CloudWatch agent is `running`. |
 
-## 4. Commands Executed & Purpose
-1. `sudo dpkg -i -E /tmp/amazon-cloudwatch-agent.deb`
-   - **Purpose:** Installs the Amazon CloudWatch Agent package on Ubuntu/Debian Linux.
-2. `sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m onPremise -c file:capstone/project17-cloudwatch-logs/amazon-cloudwatch-agent.json -s`
-   - **Purpose:** Loads `amazon-cloudwatch-agent.json`, validates the configuration, and starts the agent daemon.
-3. `sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a status`
-   - **Purpose:** Confirms that the CloudWatch Agent is actively `running`.
-4. `aws logs describe-log-groups --log-group-name-prefix "/amrish-capstone" --region ap-south-1 --output table`
-   - **Purpose:** Verifies that the target CloudWatch Log Groups and retention policies were created in `ap-south-1`.
-
-## 5. Expected Output & Verification
-- CloudWatch Logs Console displays live log streams inside `/amrish-capstone/project17-app-logs` and `/amrish-capstone/project17-syslog`.
+## Deliverables
+- CloudWatch Log Group / Log Stream dashboard screenshot (`screenshots/`)

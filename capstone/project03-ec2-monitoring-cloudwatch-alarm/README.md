@@ -1,27 +1,22 @@
-# Project 03: Automated Nginx Web Server Hosting on EC2 via Terraform
+# Project 3: EC2 State Monitoring with CloudWatch Alarm
 
-## 1. Project Overview & Goal
-The goal of this project is to provision an Ubuntu EC2 instance and Security Group on AWS using **Terraform** and automatically install and start the **Nginx Web Server** to serve HTTP traffic on Port 80.
+## Goal
+Monitor EC2 CPU utilization and trigger a CloudWatch alarm when CPU usage spikes above the threshold.
 
-## 2. Files in This Folder
-- `provider.tf` — Configures the AWS provider in `ap-south-1`.
-- `main.tf` — Defines the EC2 instance, Security Group (`Port 22` & `Port 80`), and user-data script to install and enable Nginx.
-- `outputs.tf` — Exports the Public IP address of the Nginx web server.
+## Steps Performed
+1. Provisioned an EC2 instance using Terraform (`aws_instance`).
+2. Created an `aws_cloudwatch_metric_alarm` resource monitoring `CPUUtilization` (`AWS/EC2` namespace) with a threshold (e.g., > 70% for 1-2 evaluation periods).
+3. Simulated a CPU spike on the EC2 instance using the `stress` utility.
+4. Verified that the CloudWatch Alarm transitioned from `OK` to `In alarm` state.
 
-## 3. Step-by-Step Implementation
-1. **Infrastructure & Firewall Definition:** Configured an Ubuntu EC2 instance paired with a Security Group permitting inbound SSH (`22`) and HTTP (`80`) traffic.
-2. **Automated Nginx Bootstrap:** Included user-data commands to update system packages, install `nginx`, and enable the systemd service on startup.
-3. **Provisioning & HTTP Verification:** Applied the Terraform stack and confirmed Nginx availability over HTTP.
+## Commands Used & Their Purpose
+| Command | Purpose |
+| :--- | :--- |
+| `terraform apply -auto-approve` | Deploys the EC2 instance and CloudWatch CPU alarm. |
+| `sudo apt-get install -y stress` | Installs the Linux CPU stress-testing tool on the EC2 instance. |
+| `stress --cpu 2 --timeout 300` | Generates high CPU load for 5 minutes to breach the alarm threshold. |
+| `aws cloudwatch describe-alarms --alarm-names <ALARM_NAME>` | Checks the current state (`OK` vs `ALARM`) via AWS CLI. |
 
-## 4. Commands Executed & Purpose
-1. `cd capstone/project03-ec2-nginx-hosting && terraform init`
-   - **Purpose:** Initializes the Terraform workspace and provider dependencies.
-2. `terraform validate && terraform plan`
-   - **Purpose:** Checks HCL syntax and previews the EC2 and Security Group creation plan.
-3. `terraform apply -auto-approve`
-   - **Purpose:** Launches the EC2 instance on AWS and installs the Nginx web server.
-4. `curl -i http://<EC2_PUBLIC_IP>`
-   - **Purpose:** Confirms `Server: nginx` headers and an `HTTP 200 OK` response on the instance's Public IP.
-
-## 5. Expected Output & Verification
-- `curl -i http://<EC2_PUBLIC_IP>` returns `HTTP/1.1 200 OK` with Nginx serving the landing page.
+## Deliverables
+- Terraform code in GitHub repository
+- Screenshot of CloudWatch Alarm in `In alarm` state (`screenshots/`)
