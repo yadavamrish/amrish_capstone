@@ -1,20 +1,21 @@
 # Project 12: Infrastructure CI Trigger (Terraform Plan)
 
 ## Goal
-Automatically run `terraform plan` inside a CI pipeline on every push to preview infrastructure changes before applying.
+Automatically validate and plan `capstone/project12-infrastructure-ci-trigger-terraform-plan/main.tf` in a CI pipeline to preview infrastructure changes before applying.
 
 ## Steps Performed
-1. Configured a GitHub Actions workflow (`.github/workflows/terraform-plan.yml`) triggered on push/PR events.
-2. Added AWS credentials via GitHub Encrypted Secrets (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`).
-3. Configured pipeline steps to run `terraform init`, `terraform validate`, and `terraform plan -no-color`.
-4. Verified successful execution and plan output in the GitHub Actions job logs.
+1. Configured a GitHub Actions workflow (`.github/workflows/terraform-plan.yml`) triggered by relevant pushes to `main` or manually.
+2. Configured pipeline steps to initialize the local provider, validate the configuration, and generate a plan.
+3. Uploaded the generated plan as `terraform-plan-artifact`.
 
 ## Commands Used & Their Purpose
 | Command | Purpose |
 | :--- | :--- |
-| `terraform init` | Initializes backend and AWS provider inside the CI runner. |
-| `terraform plan -no-color` | Generates a clean, readable execution plan showing resources to add/change/destroy. |
-| `git push origin main` | Triggers the automated CI pipeline run on GitHub. |
+| `cd capstone/project12-infrastructure-ci-trigger-terraform-plan && terraform init -backend=false` | Initializes Terraform providers without configuring a backend. |
+| `terraform validate` | Validates the Terraform configuration. |
+| `terraform plan -refresh=false -out=tfplan` | Generates a binary execution plan for upload. |
+| `git push origin main` | Triggers the pipeline when relevant paths have changed. |
 
 ## Deliverables
-- GitHub Actions job success screenshot displaying `terraform plan` output (`screenshots/`)
+- The `terraform-plan-artifact` plan and GitHub Actions job output.
+- GitHub Actions job success screenshot displaying `terraform plan` output (`screenshots/`).
