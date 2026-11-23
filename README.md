@@ -16,7 +16,7 @@
 | **09** | Terraform Modular IaC | Reusable DRY Terraform child modules (`network`, `security`, `compute`) | [README](capstone/project09-terraform-modular-iac/README.md) |
 | **10** | Internal DNS Setup | VPC-scoped private service discovery via Route 53 Private Hosted Zone | [README](capstone/project10-internal-dns/README.md) |
 | **11** | Infra Branching Policy | Git feature branching workflow & Pull Request review governance | [README](capstone/project11-infra-branching-policy/README.md) |
-| **12** | Terraform CI Plan | Automated GitHub Actions `terraform plan` & artifact generation | [README](capstone/project12-terraform-ci-plan/README.md) |
+| **12** | Terraform CI Plan | Automated GitHub Actions `terraform plan` & artifact generation | [README](capstone/project12-infrastructure-ci-trigger-terraform-plan/README.md) |
 | **13** | CloudWatch Alarm | Containerized app monitoring & CloudWatch CPU threshold alarms | [README](capstone/project13-cloudwatch-alarm/README.md) |
 | **14** | EKS App Deployment | Scalable Kubernetes `Deployment` rollout on Amazon EKS | [README](capstone/project14-eks-app-deployment/README.md) |
 | **15** | EC2-Based Ansible | Agentless configuration management across EC2 nodes using Ansible playbooks | [README](capstone/project15-ansible-ec2/README.md) |
